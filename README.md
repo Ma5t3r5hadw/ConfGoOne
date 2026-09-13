@@ -9,7 +9,7 @@
 [![Platform](https://img.shields.io/badge/platform-Windows-2f8ef4?style=for-the-badge)](#-download)
 [![License](https://img.shields.io/badge/license-Commercial-8b7bff?style=for-the-badge)](#-licensing--pricing)
 
-<a href="https://Ma5t3r5hadw.github.io/ConfGoOne/"><b>Website</b></a> ·
+<a href="https://confgoone.com/"><b>Website</b></a> ·
 <a href="#-download"><b>Download</b></a> ·
 <a href="#-licensing--pricing"><b>Pricing</b></a> ·
 <a href="#-support">Support</a>
@@ -192,7 +192,7 @@ Windows only for now, macOS in progress. The app checks for updates on its own �
 | Multi-tenant / MSP mode | — | — | ✅ |
 | Support | Community | Priority email | Direct channel |
 
-One license, activated on one machine. See the **[pricing page](https://Ma5t3r5hadw.github.io/ConfGoOne/#pricing)** for current terms, discounts on longer billing cycles, and tax details.
+One license, activated on one machine. See the **[pricing page](https://confgoone.com/#pricing)** for current terms, discounts on longer billing cycles, and tax details.
 
 <br>
 
@@ -209,7 +209,7 @@ One license, activated on one machine. See the **[pricing page](https://Ma5t3r5h
 
 Found a bug, or something not working as expected? Open an **[issue](https://github.com/Ma5t3r5hadw/ConfGoOne/issues)** here.
 
-For licensing or billing questions, use the contact link on the **[website](https://Ma5t3r5hadw.github.io/ConfGoOne/)**, or email **confgoone@gmail.com**.
+For licensing or billing questions, use the contact link on the **[website](https://confgoone.com/)**, or email **confgoone@gmail.com**.
 
 <br>
 
