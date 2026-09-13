@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ConfGoOne</title>
+<meta name="description" content="AI-assisted security configuration auditing that reviews itself the moment you open a file.">
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#020306; --abyss:#05070d; --graphite:#0a0e17; --panel:#0d121e; --panel-hi:#131b2b;
+  --border:rgba(154,168,196,.14); --border-hi:rgba(111,195,255,.4); --border-glow:rgba(111,195,255,.7);
+  --chrome-hi:#f6f9fd; --chrome-mid:#9aa7bc; --chrome-dim:#7683a0;
+  --signal:#2f8ef4; --signal-bright:#6fc3ff; --signal-dim:#1747a8; --signal-violet:#8b7bff;
+  --signal-glow:rgba(47,142,244,.4); --violet-glow:rgba(139,123,255,.35);
+  --good:#3ddc97; --acc-cyan:#4dd0e1; --acc-orange:#ff8a5c; --acc-amber:#ffb454; --acc-rose:#ff6b9d;
+  --font-display:'Bricolage Grotesque',sans-serif;
+  --font-body:'Plus Jakarta Sans',-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--void); color:var(--chrome-mid);
+  font-family:var(--font-body); font-size:15.5px; line-height:1.65;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+h1,h2,h3{font-family:var(--font-display);color:var(--chrome-hi);text-wrap:balance;letter-spacing:-.02em}
+a{color:var(--signal-bright);text-decoration:none}
+.mono{font-family:var(--font-mono)}
+img{max-width:100%;display:block}
+::selection{background:var(--signal-dim);color:#fff}
+::-webkit-scrollbar{width:9px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--signal),var(--signal-violet));border-radius:9px}
+
+/* ── Ambient scene: layered mesh glow + grid + vignette + noise ── */
+.scene{position:fixed;inset:0;z-index:0;pointer-events:none}
+.mesh{position:absolute;inset:-20%;filter:blur(80px);opacity:.55}
+.mesh .b1{position:absolute;width:52vw;height:52vw;left:-10%;top:-8%;border-radius:50%;
+  background:radial-gradient(circle,var(--signal-glow),transparent 70%);animation:drift1 22s ease-in-out infinite}
+.mesh .b2{position:absolute;width:46vw;height:46vw;right:-12%;top:6%;border-radius:50%;
+  background:radial-gradient(circle,var(--violet-glow),transparent 70%);animation:drift2 26s ease-in-out infinite}
+.mesh .b3{position:absolute;width:40vw;height:40vw;left:30%;top:55%;border-radius:50%;
+  background:radial-gradient(circle,rgba(47,142,244,.22),transparent 70%);animation:drift3 30s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6%,8%) scale(1.15)}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-8%,5%) scale(1.1)}}
+@keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(4%,-6%) scale(1.2)}}
+.grid-bg{position:absolute;inset:0;opacity:.6;
+  background-image:
+    linear-gradient(rgba(154,168,196,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(154,168,196,.06) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 85% 55% at 50% 0%,#000 30%,transparent 100%);
+}
+.grain{position:absolute;inset:0;opacity:.035;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@media (prefers-reduced-motion:reduce){ .mesh .b1,.mesh .b2,.mesh .b3{animation:none} }
+
+/* ── Nav ── */
+.nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:34px;
+  padding:20px 48px;background:rgba(2,3,6,.82);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border)}
+.nav .brand{display:flex;align-items:center;gap:11px;margin-right:auto;flex-shrink:0}
+.nav .brand img{width:32px;height:32px;filter:drop-shadow(0 0 10px var(--signal-glow))}
+.nav .brand span{font-family:var(--font-display);font-weight:700;font-size:17px;color:var(--chrome-hi)}
+.nav a.link{font-size:14px;font-weight:500;color:var(--chrome-mid);white-space:nowrap;position:relative;padding:4px 0}
+.nav a.link::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--signal-bright);
+  transform:scaleX(0);transition:transform .25s}
+.nav a.link:hover{color:var(--chrome-hi)}
+.nav a.link:hover::after{transform:scaleX(1)}
+.nav .cta{font-family:var(--font-body);font-weight:700;font-size:13.5px;color:#020617;
+  background:linear-gradient(135deg,var(--signal-bright),var(--signal));
+  padding:11px 22px;border-radius:100px;white-space:nowrap;box-shadow:0 0 26px var(--signal-glow);
+  transition:transform .2s,box-shadow .2s}
+.nav .cta:hover{transform:translateY(-2px);box-shadow:0 4px 34px var(--signal-glow)}
+@media (max-width:820px){ .nav a.link{display:none} }
+
+.wrap{position:relative;z-index:1;max-width:1220px;margin:0 auto;padding:0 48px}
+@media (max-width:600px){ .wrap{padding:0 22px} .nav{padding:18px 22px} }
+
+/* ── Hero ── */
+.hero{padding:110px 0 80px;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+.hero .eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-mono);
+  font-size:12px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--signal-bright);
+  border:1px solid var(--border-hi);border-radius:100px;padding:7px 16px;margin-bottom:30px;
+  background:rgba(47,142,244,.09)}
+.hero .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--good);box-shadow:0 0 10px var(--good);
+  animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:52px;line-height:1.08;font-weight:800;margin-bottom:22px;letter-spacing:-.025em}
+.hero h1 .accent{background:linear-gradient(120deg,var(--signal-bright) 10%,var(--signal-violet) 90%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p.lede{font-size:16.5px;color:var(--chrome-mid);max-width:480px;margin-bottom:34px;line-height:1.65}
+.hero .actions{display:flex;gap:16px;flex-wrap:wrap}
+.btn{font-family:var(--font-body);font-weight:700;font-size:14px;border-radius:100px;padding:14px 28px;
+  cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:9px;
+  transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-3px)}
+.btn-primary{color:#020617;background:linear-gradient(135deg,var(--signal-bright),var(--signal));box-shadow:0 10px 34px var(--signal-glow)}
+.btn-primary:hover{box-shadow:0 14px 44px var(--signal-glow)}
+.btn-ghost{color:var(--chrome-hi);background:rgba(255,255,255,.04);border-color:var(--border);backdrop-filter:blur(8px)}
+.btn-ghost:hover{border-color:var(--border-hi)}
+.hero .meta{margin-top:24px;font-family:var(--font-mono);font-size:12.5px;color:var(--chrome-dim);display:flex;gap:8px;align-items:center}
+
+/* ── Hero 3D stage — a real WebGL scene (a wireframe core wrapped in an
+   orbiting particle network, built in Three.js — see the script at the
+   bottom of the page) with a floating "live scan" HUD panel overlaid on
+   top of it ── */
+.stage{display:flex;align-items:center;justify-content:center;height:460px;position:relative}
+.stage canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block}
+.hologram{width:250px;position:absolute;right:0;bottom:2%;z-index:2;
+  background:linear-gradient(160deg,rgba(19,27,43,.95),rgba(11,15,25,.98));
+  border:1px solid var(--border-hi);border-radius:16px;padding:20px;
+  box-shadow:0 30px 60px rgba(0,0,0,.6),0 0 50px var(--signal-glow),inset 0 1px 0 rgba(255,255,255,.06);
+  display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;
+  animation:holo-float 6s ease-in-out infinite;will-change:transform}
+@keyframes holo-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.holo-head{display:flex;align-items:center;gap:8px}
+.holo-dots{display:flex;gap:5px}
+.holo-dots span{width:7px;height:7px;border-radius:50%;background:var(--chrome-dim)}
+.holo-label{font-family:var(--font-mono);font-size:10.5px;color:var(--chrome-dim);margin-left:auto;letter-spacing:.05em}
+.holo-score{display:flex;align-items:center;gap:14px}
+.score-ring{--pct:0;width:64px;height:64px;border-radius:50%;flex-shrink:0;position:relative;
+  background:conic-gradient(var(--signal-bright) calc(var(--pct)*1%),rgba(154,168,196,.16) 0);
+  transition:background 1.4s ease-out}
+.score-ring::before{content:'';position:absolute;inset:6px;border-radius:50%;background:#0d121e}
+.score-ring span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-weight:800;font-size:16px;color:var(--chrome-hi)}
+.score-meta .score-title{font-size:10.5px;color:var(--chrome-hi);letter-spacing:.05em;font-weight:600}
+.score-meta .score-sub{font-family:var(--font-mono);font-size:9.5px;color:var(--chrome-dim);margin-top:4px}
+.holo-findings{display:flex;flex-direction:column;gap:9px;border-top:1px solid var(--border);padding-top:12px}
+.hf-row{font-family:var(--font-mono);font-size:10px;color:var(--chrome-mid);display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hf-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.hf-dot.crit{background:#ff5c72;box-shadow:0 0 8px #ff5c72}
+.hf-dot.high{background:#ffa63d;box-shadow:0 0 8px #ffa63d}
+.hf-dot.med{background:var(--signal-bright);box-shadow:0 0 8px var(--signal-bright)}
+.holo-scan{position:absolute;left:0;right:0;top:-40%;height:40%;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(111,195,255,.16),transparent);
+  animation:scan-sweep 3.2s ease-in-out infinite}
+@keyframes scan-sweep{0%{top:-40%}100%{top:100%}}
+.floaty{position:absolute;font-family:var(--font-mono);font-size:11px;color:var(--signal-bright);
+  background:rgba(13,18,30,.85);border:1px solid var(--border-hi);border-radius:9px;padding:7px 12px;
+  backdrop-filter:blur(6px);white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:2}
+.floaty.f1{top:4%;left:0;animation:float1 6s ease-in-out infinite}
+.floaty.f2{top:8%;right:2%;animation:float2 7s ease-in-out infinite}
+.floaty.f3{bottom:8%;left:4%;animation:float1 6.5s ease-in-out infinite .5s}
+@keyframes float1{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+@media (prefers-reduced-motion:reduce){
+  .hologram,.holo-scan,.floaty,.hero .eyebrow .dot{animation:none}
+}
+@media (max-width:960px){ .hero{grid-template-columns:1fr;padding-top:70px} .hero h1{font-size:38px} .stage{height:340px} .floaty{display:none} .hologram{width:210px} }
+
+/* ── Section shell ── */
+section{position:relative;padding:110px 0;border-top:1px solid var(--border)}
+.section-head{max-width:640px;margin-bottom:56px}
+.section-head .eyebrow2{font-family:var(--font-mono);font-size:12px;font-weight:500;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--signal-bright);margin-bottom:16px;display:block}
+.section-head h2{font-size:32px;font-weight:700;margin-bottom:14px;letter-spacing:-.02em}
+.section-head p{font-size:15.5px;color:var(--chrome-mid);line-height:1.7}
+
+/* ── Bento feature grid — two clean rows of wide+narrow+narrow, all cards
+   the same height (Dashboard used to span 2 rows and dwarf everything
+   else; now it's sized the same as the other "wide" card) ── */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(230px,auto);gap:18px}
+.bento .card.wide{grid-column:span 2}
+@media (max-width:960px){ .bento{grid-template-columns:repeat(2,1fr)} .bento .card.wide{grid-column:span 2} }
+@media (max-width:600px){ .bento{grid-template-columns:1fr;grid-auto-rows:auto} .bento .card.wide{grid-column:span 1} }
+.card{--accent:var(--signal-bright);background:linear-gradient(160deg,var(--panel-hi),var(--panel));border:1px solid var(--border);
+  border-radius:18px;padding:28px;transition:border-color .3s,box-shadow .3s,transform .5s cubic-bezier(.16,1,.3,1);
+  position:relative;overflow:hidden;display:flex;flex-direction:column;transform-style:preserve-3d}
+.card[data-accent="rose"]{--accent:var(--acc-rose)}
+.card[data-accent="cyan"]{--accent:var(--acc-cyan)}
+.card[data-accent="orange"]{--accent:var(--acc-orange)}
+.card[data-accent="green"]{--accent:var(--good)}
+.card[data-accent="violet"]{--accent:var(--signal-violet)}
+.card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--accent) 22%,transparent),transparent 60%)}
+.card:hover::before{opacity:1}
+.card:hover{border-color:color-mix(in srgb,var(--accent) 50%,var(--border));box-shadow:0 20px 48px rgba(0,0,0,.35)}
+.card .icon{width:44px;height:44px;border-radius:12px;background:color-mix(in srgb,var(--accent) 16%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);display:flex;align-items:center;justify-content:center;
+  margin-bottom:18px;font-size:19px;flex-shrink:0;transform:translateZ(30px)}
+.card h3{font-size:16.5px;font-weight:700;margin-bottom:9px;font-family:var(--font-body);color:var(--chrome-hi);transform:translateZ(18px)}
+.card p{font-size:13.5px;color:var(--chrome-mid);line-height:1.6;transform:translateZ(6px)}
+.card.wide p{max-width:440px}
+.card .mini{margin-top:auto;padding-top:16px;transform:translateZ(14px)}
+
+/* ── Bento mini-visuals: a small live-preview widget per card, standing in
+   for that tab's real content. CSS-only (no extra JS render loops) so
+   they stay cheap no matter how many cards are on screen at once. ── */
+.mini-ring .ring{--pct:0;width:44px;height:44px;border-radius:50%;position:relative;
+  background:conic-gradient(var(--accent) calc(var(--pct)*1%),rgba(255,255,255,.08) 0);
+  animation:mini-pulse 2.6s ease-in-out infinite}
+.mini-ring .ring::before{content:'';position:absolute;inset:5px;border-radius:50%;background:var(--panel-hi)}
+.mini-ring .ring span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--chrome-hi)}
+@keyframes mini-pulse{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 7px var(--accent))}}
+.mini-lines{display:flex;flex-direction:column;gap:5px;max-width:160px}
+.mini-lines i{display:block;height:5px;border-radius:3px;background:color-mix(in srgb,var(--accent) 40%,transparent);
+  animation:mini-scan 2.4s ease-in-out infinite}
+.mini-lines i:nth-child(1){width:82%}
+.mini-lines i:nth-child(2){width:58%;animation-delay:.25s}
+.mini-lines i:nth-child(3){width:68%;animation-delay:.5s}
+@keyframes mini-scan{0%,100%{opacity:.35}50%{opacity:1}}
+.mini-chips{display:flex;flex-wrap:wrap;gap:6px}
+.mini-chips span{font-family:var(--font-mono);font-size:9.5px;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 14%,transparent);border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+  border-radius:100px;padding:3px 8px;animation:mini-chip-pulse 3s ease-in-out infinite}
+.mini-chips span:nth-child(2){animation-delay:.4s}
+.mini-chips span:nth-child(3){animation-delay:.8s}
+.mini-chips span:nth-child(4){animation-delay:1.2s}
+@keyframes mini-chip-pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.mini-path{position:relative;height:36px;max-width:220px}
+.mini-path svg{width:100%;height:100%;display:block}
+.mini-path .path-dot{position:absolute;top:0;left:0;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 8px var(--accent);
+  offset-path:path('M6 28 L64 8 L128 28 L214 10');animation:mini-travel 3s linear infinite}
+@keyframes mini-travel{0%{offset-distance:0%}100%{offset-distance:100%}}
+.mini-stack{position:relative;height:38px;width:34px}
+.mini-stack .page{position:absolute;left:0;top:0;width:30px;height:38px;border-radius:4px;
+  background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.03));
+  border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);transition:transform .35s ease}
+.mini-stack .p1{transform:translate(0,0);z-index:3}
+.mini-stack .p2{transform:translate(3px,3px);z-index:2}
+.mini-stack .p3{transform:translate(6px,6px);z-index:1}
+.card:hover .mini-stack .p1{transform:translate(-7px,-2px) rotate(-7deg)}
+.card:hover .mini-stack .p2{transform:translate(2px,0) rotate(2deg)}
+.card:hover .mini-stack .p3{transform:translate(9px,4px) rotate(8deg)}
+.mini-typing{display:flex;gap:5px}
+.mini-typing i{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:mini-bounce 1.2s ease-in-out infinite}
+.mini-typing i:nth-child(2){animation-delay:.15s}
+.mini-typing i:nth-child(3){animation-delay:.3s}
+@keyframes mini-bounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-6px);opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .mini-ring .ring,.mini-lines i,.mini-chips span,.mini-path .path-dot,.mini-typing i{animation:none}
+}
+
+/* ── Full feature set: a horizontal 3D coverflow rail. Cards tilt and dim
+   by distance from center as you scroll or click through — replaces a
+   static wall of bullet text with something you actually move through. ── */
+.feature-rail-wrap{position:relative}
+.feature-rail{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x proximity;
+  padding:30px 6vw 46px;scrollbar-width:none;-ms-overflow-style:none}
+.feature-rail::-webkit-scrollbar{display:none}
+.rail-nav{position:absolute;top:42%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;
+  background:rgba(13,18,30,.85);border:1px solid var(--border-hi);color:var(--chrome-hi);font-size:19px;
+  cursor:pointer;z-index:3;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);
+  transition:background .2s,border-color .2s}
+.rail-nav:hover{background:rgba(47,142,244,.25);border-color:var(--signal-bright)}
+.rail-nav.prev{left:-6px}
+.rail-nav.next{right:-6px}
+@media (max-width:700px){ .rail-nav{display:none} }
+.rail-dots{display:flex;justify-content:center;gap:8px;margin-top:2px}
+.rail-dots button{width:7px;height:7px;border-radius:50%;background:var(--border);border:none;cursor:pointer;
+  padding:0;transition:background .25s,transform .25s}
+.rail-dots button.active{background:var(--signal-bright);transform:scale(1.4)}
+.feat-card{--accent:var(--signal-bright);flex:0 0 300px;scroll-snap-align:center;
+  background:linear-gradient(160deg,var(--panel-hi),var(--panel));border:1px solid var(--border);
+  border-radius:18px;padding:26px;position:relative;overflow:hidden;
+  transition:border-color .3s,box-shadow .3s,transform .35s ease-out,opacity .35s ease-out}
+.feat-card[data-accent="cyan"]{--accent:var(--acc-cyan)}
+.feat-card[data-accent="orange"]{--accent:var(--acc-orange)}
+.feat-card[data-accent="violet"]{--accent:var(--signal-violet)}
+.feat-card[data-accent="green"]{--accent:var(--good)}
+.feat-card[data-accent="amber"]{--accent:var(--acc-amber)}
+.feat-card[data-accent="rose"]{--accent:var(--acc-rose)}
+.feat-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;
+  background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--accent) 24%,transparent),transparent 60%)}
+.feat-card:hover::before{opacity:1}
+.feat-card:hover{border-color:color-mix(in srgb,var(--accent) 55%,var(--border));
+  box-shadow:0 22px 48px rgba(0,0,0,.4),0 0 36px color-mix(in srgb,var(--accent) 20%,transparent)}
+.feat-card .icon{width:40px;height:40px;border-radius:11px;flex-shrink:0;font-size:18px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+  background:color-mix(in srgb,var(--accent) 16%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);
+  box-shadow:0 0 18px color-mix(in srgb,var(--accent) 25%,transparent)}
+.feat-card h4{font-family:var(--font-body);font-size:15px;font-weight:700;color:var(--chrome-hi);margin-bottom:8px}
+.feat-card p{font-size:13px;color:var(--chrome-mid);line-height:1.55}
+.feat-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.feat-tags span{font-family:var(--font-mono);font-size:10px;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 14%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);border-radius:100px;padding:3px 9px}
+.feat-card.spotlight{flex-basis:340px;border-color:color-mix(in srgb,var(--accent) 40%,var(--border))}
+.spotlight-badge{position:absolute;top:16px;right:16px;font-family:var(--font-mono);font-size:9px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 18%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:100px;padding:4px 10px}
+.risk-bars{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+.risk-row{display:grid;grid-template-columns:1fr 64px 42px;align-items:center;gap:8px;font-size:11px;color:var(--chrome-mid)}
+.risk-row .bar{height:6px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+.risk-row .bar i{display:block;height:100%;border-radius:4px;
+  background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 55%,white))}
+.risk-row b{font-family:var(--font-mono);color:var(--chrome-hi);text-align:right;font-size:11px;font-weight:600}
+@media (max-width:600px){ .feat-card{flex:0 0 260px} .feat-card.spotlight{flex-basis:280px} }
+
+/* ── How it works: step list + a sticky 3D visual filling what used to be
+   dead space on the right — it lights up in sync with the active step ── */
+.how-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:start}
+@media (max-width:960px){ .how-grid{grid-template-columns:1fr} }
+.flow{display:flex;flex-direction:column;gap:0}
+.flow-step{display:grid;grid-template-columns:58px 1fr;gap:26px;padding:26px 0;position:relative}
+.flow-step:not(:last-child)::after{content:'';position:absolute;left:28px;top:64px;bottom:-4px;width:1px;
+  background:linear-gradient(var(--border-hi),transparent)}
+.flow-num{width:58px;height:58px;border-radius:50%;background:var(--panel);border:1.5px solid var(--signal);
+  display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:500;
+  color:var(--signal-bright);font-size:16px;flex-shrink:0;box-shadow:0 0 24px var(--signal-glow);
+  transition:transform .3s,box-shadow .3s,border-color .3s}
+.flow-step h3{font-size:17px;margin-bottom:6px;font-family:var(--font-body);font-weight:700;color:var(--chrome-hi);transition:color .3s}
+.flow-step p{font-size:13.5px;color:var(--chrome-mid);max-width:540px}
+.flow-step.active .flow-num{transform:scale(1.1);border-color:var(--signal-bright);box-shadow:0 0 34px var(--signal-glow)}
+.flow-step.active h3{color:var(--signal-bright)}
+.how-visual{position:sticky;top:110px;height:420px;border-radius:20px;overflow:hidden;
+  background:linear-gradient(160deg,var(--panel-hi),var(--panel));border:1px solid var(--border);perspective:1300px}
+@media (max-width:960px){ .how-visual{position:static;height:300px;margin-top:8px} }
+
+/* ── How it works: floating labeled cards in real 3D (perspective +
+   rotateY/translateZ), one per step, connected by a glowing spine with a
+   traveling pulse. The active card (synced to the step you're reading)
+   pops forward and lights up. ── */
+.flow3d{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.flow3d::before{content:'';position:absolute;left:50%;top:8%;bottom:8%;width:2px;margin-left:-1px;
+  background:linear-gradient(var(--border-hi),var(--signal-bright),var(--signal-violet),var(--border-hi));
+  opacity:.4;transform:translateZ(-14px)}
+.flow3d-pulse{position:absolute;left:50%;top:8%;width:8px;height:8px;margin-left:-4px;border-radius:50%;
+  background:#fff;box-shadow:0 0 12px var(--signal-bright),0 0 24px var(--signal-bright);
+  transform:translateZ(-14px);animation:pulse-travel 4s ease-in-out infinite}
+@keyframes pulse-travel{0%{top:8%;opacity:0}8%{opacity:1}92%{opacity:1}100%{top:88%;opacity:0}}
+.flow3d-card{--tz:12px;--rot:7deg;--tx:-56px;--s:1;position:absolute;left:50%;width:220px;margin-left:-110px;
+  display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:14px;
+  background:linear-gradient(160deg,rgba(19,27,43,.96),rgba(11,15,25,.98));border:1px solid var(--border);
+  box-shadow:0 16px 34px rgba(0,0,0,.4);transform-style:preserve-3d;
+  transform:translateX(var(--tx)) translateZ(var(--tz)) rotateY(var(--rot)) scale(var(--s));
+  transition:border-color .3s,box-shadow .3s,transform .4s ease;animation:card-bob 5s ease-in-out infinite}
+.flow3d-card:nth-child(odd){--tz:12px;--rot:7deg;--tx:-56px}
+.flow3d-card:nth-child(even){--tz:-12px;--rot:-7deg;--tx:56px}
+.flow3d-card:nth-child(2){animation-delay:.6s}
+.flow3d-card:nth-child(3){animation-delay:1.2s}
+.flow3d-card:nth-child(4){animation-delay:1.8s}
+.flow3d-card:nth-child(5){animation-delay:2.4s}
+@keyframes card-bob{0%,100%{margin-top:0}50%{margin-top:-8px}}
+.flow3d-card.active{--s:1.08;border-color:var(--signal-bright);
+  box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 36px var(--signal-glow)}
+.f3-icon{width:34px;height:34px;border-radius:10px;flex-shrink:0;font-size:16px;
+  display:flex;align-items:center;justify-content:center;background:rgba(47,142,244,.14);
+  border:1px solid var(--border-hi);transition:background .3s,border-color .3s}
+.flow3d-card.active .f3-icon{background:rgba(111,195,255,.22);border-color:var(--signal-bright)}
+.f3-label{font-size:13px;font-weight:700;color:var(--chrome-hi);margin-bottom:2px}
+.f3-sub{font-size:11px;color:var(--chrome-mid);line-height:1.4}
+@media (max-width:960px){ .flow3d-card{width:76%;margin-left:-38%} }
+@media (prefers-reduced-motion:reduce){ .flow3d-card,.flow3d-pulse{animation:none} }
+
+/* ── Live network canvas panel ── */
+.network-panel{background:linear-gradient(160deg,var(--panel-hi),var(--panel));border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;position:relative;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.network-panel .panel-head{display:flex;align-items:center;gap:11px;padding:18px 22px;border-bottom:1px solid var(--border)}
+.panel-head .dots{display:flex;gap:7px}
+.panel-head .dots span{width:10px;height:10px;border-radius:50%;background:var(--chrome-dim)}
+.panel-head .label{font-family:var(--font-mono);font-size:12.5px;color:var(--chrome-mid);margin-left:auto}
+#netcanvas{display:block;width:100%;height:380px}
+.net-label{position:absolute;top:0;left:0;font-family:var(--font-mono);font-size:11px;color:rgba(246,249,253,.85);
+  pointer-events:none;white-space:nowrap;text-shadow:0 2px 8px rgba(0,0,0,.7);will-change:transform}
+
+/* ── Pricing ── */
+.toggle{display:inline-flex;background:var(--panel);border:1px solid var(--border);border-radius:100px;padding:5px;margin-bottom:44px}
+.toggle button{font-family:var(--font-body);font-weight:600;font-size:14px;color:var(--chrome-mid);
+  background:none;border:none;padding:11px 24px;border-radius:100px;cursor:pointer;transition:all .2s}
+.toggle button.active{background:linear-gradient(135deg,var(--signal-bright),var(--signal));color:#020617}
+.toggle button .save{font-family:var(--font-mono);font-size:10.5px;font-weight:500;color:var(--good);
+  background:rgba(61,220,151,.14);border:1px solid rgba(61,220,151,.4);border-radius:100px;
+  padding:2px 8px;margin-left:7px}
+.toggle button.active .save{color:#020617;background:rgba(2,6,23,.18);border-color:rgba(2,6,23,.25)}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media (max-width:960px){ .plans{grid-template-columns:1fr} }
+.plan{--accent:var(--signal-bright);background:linear-gradient(160deg,var(--panel-hi),var(--panel));border:1px solid var(--border);
+  border-radius:20px;padding:36px 30px;display:flex;flex-direction:column;position:relative;
+  transform-style:preserve-3d;transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .3s}
+.plan[data-accent="violet"]{--accent:var(--signal-violet)}
+.plan::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;z-index:1;
+  border-radius:20px;overflow:hidden;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--accent) 20%,transparent),transparent 60%)}
+.plan:hover::before{opacity:1}
+.plan:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--border))}
+.plan-halo{position:absolute;z-index:0;top:-90px;left:50%;width:260px;height:260px;margin-left:-130px;
+  border-radius:50%;filter:blur(54px);opacity:.32;pointer-events:none;
+  background:conic-gradient(from 0deg,var(--signal-bright),var(--signal-violet),var(--signal-bright));
+  animation:halo-spin 16s linear infinite}
+@keyframes halo-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){ .plan-halo{animation:none} }
+.plan-body{position:relative;z-index:2;display:flex;flex-direction:column;flex:1}
+.plan.featured{border-color:var(--border-hi);box-shadow:0 20px 60px var(--signal-glow)}
+.plan.featured:hover{box-shadow:0 28px 80px var(--signal-glow)}
+.plan.featured::after{content:'MOST POPULAR';position:absolute;top:-12px;left:30px;font-family:var(--font-mono);
+  font-size:10.5px;font-weight:500;letter-spacing:.09em;background:linear-gradient(135deg,var(--signal-bright),var(--signal));
+  color:#020617;padding:4px 12px;border-radius:100px;transform:translateZ(30px)}
+.plan h3{font-size:18px;margin-bottom:4px;transform:translateZ(14px)}
+.plan .price{font-family:var(--font-display);font-size:38px;font-weight:800;color:var(--chrome-hi);margin:14px 0 2px;transform:translateZ(26px)}
+.plan .price sup{font-family:var(--font-mono);font-size:13.5px;color:var(--chrome-mid);font-weight:400}
+.plan .price .gst{font-size:11.5px;font-weight:500;color:var(--chrome-dim);letter-spacing:normal}
+.plan .term{font-family:var(--font-mono);font-size:11.5px;color:var(--chrome-dim);margin-bottom:24px}
+.plan ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:28px;flex:1;transform:translateZ(10px)}
+.plan li{font-size:13.5px;color:var(--chrome-mid);display:flex;gap:10px;align-items:flex-start}
+.plan li::before{content:'';flex-shrink:0;width:16px;height:16px;margin-top:2px;border-radius:50%;
+  background:rgba(61,220,151,.15);border:1px solid var(--good)}
+.plan .btn{width:100%;justify-content:center;text-align:center;transform:translateZ(18px)}
+
+/* ── Trust strip ── */
+.trust{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;padding:40px 0}
+.trust .item{display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:12.5px;
+  color:var(--chrome-mid);background:var(--panel);border:1px solid var(--border);border-radius:100px;padding:10px 18px}
+
+/* ── CTA band ── */
+.cta-band{text-align:center;padding:120px 0;border-top:1px solid var(--border);position:relative}
+.cta-band h2{font-size:34px;margin-bottom:16px}
+.cta-band p{color:var(--chrome-mid);font-size:15.5px;max-width:480px;margin:0 auto 32px}
+
+/* ── Footer ── */
+footer{border-top:1px solid var(--border);padding:44px 0 64px}
+.foot-grid{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:26px}
+.foot-brand{display:flex;align-items:center;gap:11px}
+.foot-brand img{width:26px;height:26px}
+.foot-brand span{font-family:var(--font-display);font-weight:700;color:var(--chrome-hi);font-size:15px}
+footer .links{display:flex;gap:26px;flex-wrap:wrap}
+footer .links a{font-size:13.5px;color:var(--chrome-mid)}
+footer .links a:hover{color:var(--chrome-hi)}
+footer .copyright{font-family:var(--font-mono);font-size:12px;color:var(--chrome-dim);margin-top:26px}
+
+/* ── Reveal-on-scroll ── */
+.reveal{opacity:1;transform:none}
+@media (prefers-reduced-motion:no-preference){
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="mesh"><div class="b1"></div><div class="b2"></div><div class="b3"></div></div>
+  <div class="grid-bg"></div>
+  <div class="grain"></div>
+</div>
+
+<nav class="nav">
+  <a class="brand" href="#top">
+    <img src="assets/logo.png" alt="">
+    <span>ConfGoOne</span>
+  </a>
+  <a class="link" href="#what">What it does</a>
+  <a class="link" href="#features">Features</a>
+  <a class="link" href="#how">How it works</a>
+  <a class="link" href="#pricing">Pricing</a>
+  <a class="cta" href="#pricing">Get a license</a>
+</nav>
+
+<div class="wrap">
+  <!-- HERO -->
+  <section class="hero" id="top" style="border-top:none">
+    <div>
+      <div class="eyebrow"><span class="dot"></span>Reviews the moment you open a file</div>
+      <h1>Find what's wrong<br>before someone<br>else does<span class="accent">.</span></h1>
+      <p class="lede">Open a device configuration, connect to something live, or paste in a script's output — ConfGoOne reviews it immediately, explains every issue in plain language, checks it against the compliance standards you care about, and hands you a report worth sending.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#pricing">Download for Windows →</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+      <div class="meta">▸ No install-time telemetry &nbsp;·&nbsp; Runs entirely on your machine &nbsp;·&nbsp; AI is optional</div>
+    </div>
+    <div class="stage" id="heroStage">
+      <canvas id="hero3d"></canvas>
+      <div class="floaty f1">✓ CIS · NIST · PCI-DSS</div>
+      <div class="floaty f2">⚡ Attack path ranked</div>
+      <div class="floaty f3">🤖 AI-validated</div>
+      <div class="hologram" id="scanpanel">
+        <div class="holo-head">
+          <div class="holo-dots"><span></span><span></span><span></span></div>
+          <span class="holo-label">live review</span>
+        </div>
+        <div class="holo-score">
+          <div class="score-ring" id="scoreRing"><span id="scoreVal">0</span></div>
+          <div class="score-meta">
+            <div class="score-title">SECURITY SCORE</div>
+            <div class="score-sub">updated just now</div>
+          </div>
+        </div>
+        <div class="holo-findings">
+          <div class="hf-row"><span class="hf-dot crit"></span>Default SNMP community string</div>
+          <div class="hf-row"><span class="hf-dot high"></span>Management port open to any</div>
+          <div class="hf-row"><span class="hf-dot med"></span>Weak SSH cipher suite enabled</div>
+        </div>
+        <div class="holo-scan" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT IT DOES -->
+  <section id="what">
+    <div class="section-head reveal">
+      <span class="eyebrow2">What it does</span>
+      <h2>One tool, the whole review</h2>
+      <p>Every tab covers one part of the picture — from the first score you see to the report you send.</p>
+    </div>
+    <div class="bento">
+      <div class="card wide reveal" data-accent="blue">
+        <div class="icon">🛡</div><h3>Dashboard</h3>
+        <p>Your overall security score and the biggest problems, at a glance, the moment a review finishes.</p>
+        <div class="mini mini-ring"><div class="ring" style="--pct:92"><span>92</span></div></div>
+      </div>
+      <div class="card reveal" data-accent="rose">
+        <div class="icon">🔍</div><h3>Findings</h3>
+        <p>Every issue, plainly explained, with exactly how to fix it.</p>
+        <div class="mini mini-lines"><i></i><i></i><i></i></div>
+      </div>
+      <div class="card reveal" data-accent="cyan">
+        <div class="icon">✅</div><h3>Frameworks</h3>
+        <p>Measured against the standards that matter to you — or your own.</p>
+        <div class="mini mini-chips"><span>CIS</span><span>NIST</span><span>PCI</span><span>ISO</span></div>
+      </div>
+      <div class="card wide reveal" data-accent="orange">
+        <div class="icon">⚡</div><h3>Attack Path</h3>
+        <p>How small issues chain into a real breach — ranked by how dangerous each route actually is, not just listed.</p>
+        <div class="mini mini-path">
+          <svg viewBox="0 0 220 36"><path d="M6 28 L64 8 L128 28 L214 10" fill="none" stroke="rgba(154,168,196,.3)" stroke-width="1.5"/></svg>
+          <div class="path-dot"></div>
+        </div>
+      </div>
+      <div class="card reveal" data-accent="green">
+        <div class="icon">📊</div><h3>Report</h3>
+        <p>A polished document in one click, in whatever format you need.</p>
+        <div class="mini mini-stack"><div class="page p3"></div><div class="page p2"></div><div class="page p1"></div></div>
+      </div>
+      <div class="card reveal" data-accent="violet">
+        <div class="icon">💬</div><h3>AI Assistant</h3>
+        <p>Ask questions in your own words — every answer is checked before you see it.</p>
+        <div class="mini mini-typing"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FULL FEATURE SET -->
+  <section id="features">
+    <div class="section-head reveal">
+      <span class="eyebrow2">Full feature set</span>
+      <h2>Everything included, one license</h2>
+      <p>No add-on packs, no feature paywall inside the app — a Pro or Enterprise license unlocks all of it.</p>
+    </div>
+    <div class="feature-rail-wrap reveal">
+      <button class="rail-nav prev" aria-label="Previous feature">‹</button>
+      <div class="feature-rail" id="featureRail">
+        <div class="feat-card" data-accent="blue">
+          <div class="icon">🧠</div>
+          <h4>Review engine</h4>
+          <p>Deterministic rule-matching across firewalls, routers, servers, cloud, and containers — real analysis, not an LLM guess.</p>
+          <div class="feat-tags"><span>Auto device detection</span><span>Secret scanning</span><span>Offline CVE tracking</span></div>
+        </div>
+        <div class="feat-card" data-accent="orange">
+          <div class="icon">⚡</div>
+          <h4>Attack &amp; risk</h4>
+          <p>Traces how small issues chain into a real breach, ranked by how dangerous each route actually is.</p>
+          <div class="feat-tags"><span>Attack Path ranking</span><span>Reachability analysis</span></div>
+        </div>
+        <div class="feat-card spotlight" data-accent="orange">
+          <div class="spotlight-badge">Rare in this market</div>
+          <div class="icon">💰</div>
+          <h4>Cyber Risk Quantification</h4>
+          <p>Every finding priced in real dollars using FAIR-style risk modeling — most tools in this space still stop at "High / Medium / Low."</p>
+          <div class="risk-bars">
+            <div class="risk-row"><span>Default SNMP string</span><div class="bar"><i style="width:82%"></i></div><b>$12.4k</b></div>
+            <div class="risk-row"><span>Open management port</span><div class="bar"><i style="width:58%"></i></div><b>$8.1k</b></div>
+            <div class="risk-row"><span>Weak SSH cipher</span><div class="bar"><i style="width:32%"></i></div><b>$3.6k</b></div>
+          </div>
+        </div>
+        <div class="feat-card" data-accent="green">
+          <div class="icon">📊</div>
+          <h4>Reporting</h4>
+          <p>One click turns findings into whatever the person on the other end actually wants to read.</p>
+          <div class="feat-tags"><span>HTML · PDF · Word · Excel</span><span>CI/CD REST API</span></div>
+        </div>
+        <div class="feat-card" data-accent="cyan">
+          <div class="icon">✅</div>
+          <h4>Compliance</h4>
+          <p>Every major framework mapped automatically, with Control Harmonization so one finding satisfies everything it touches at once.</p>
+          <div class="feat-tags"><span>16 frameworks</span><span>XCCDF / STIG import</span><span>Drift + remediation PRs</span></div>
+        </div>
+        <div class="feat-card" data-accent="rose">
+          <div class="icon">🏢</div>
+          <h4>Multi-tenant / MSP</h4>
+          <p>Run every client's environment from one Enterprise account, each with its own scan quota.</p>
+          <div class="feat-tags"><span>Per-tenant quotas</span><span>Cross-device chains</span></div>
+        </div>
+        <div class="feat-card" data-accent="blue">
+          <div class="icon">🖥</div>
+          <h4>Platform</h4>
+          <p>Runs fully offline, updates itself, and works however you can actually reach the target.</p>
+          <div class="feat-tags"><span>File · Live · Screen capture</span><span>Light &amp; dark themes</span></div>
+        </div>
+        <div class="feat-card" data-accent="violet">
+          <div class="icon">🤖</div>
+          <h4>AI, entirely optional</h4>
+          <p>Off by default. Bring your own provider, and let an independent pass double-check every result before you see it.</p>
+          <div class="feat-tags"><span>OpenAI · Anthropic · Gemini · Ollama</span><span>Live Screen Capture</span><span>Config chat assistant</span></div>
+        </div>
+        <div class="feat-card" data-accent="amber">
+          <div class="icon">🗂</div>
+          <h4>Management</h4>
+          <p>Suppress, schedule, and scan a whole fleet from one place — nothing gets lost between reviews.</p>
+          <div class="feat-tags"><span>Scan history</span><span>Fleet scanning</span><span>Named engagements</span></div>
+        </div>
+      </div>
+      <button class="rail-nav next" aria-label="Next feature">›</button>
+    </div>
+    <div class="rail-dots" id="railDots"></div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="section-head reveal">
+      <span class="eyebrow2">How it works</span>
+      <h2>Nothing to configure, nothing to trigger</h2>
+      <p>There's no "start scan" button to remember. The review begins the instant you give it something to look at.</p>
+    </div>
+    <div class="how-grid">
+      <div class="flow">
+        <div class="flow-step reveal"><div class="flow-num">1</div><div><h3>Open a file, connect live, or share a screen</h3><p>A config file, a direct connection, a pasted script output, or a live screen capture — pick whichever fits how you can reach the system.</p></div></div>
+        <div class="flow-step reveal"><div class="flow-num">2</div><div><h3>It recognizes what it's looking at</h3><p>Network gear, firewalls, servers, cloud platforms — figured out automatically, no dropdown to fill in first.</p></div></div>
+        <div class="flow-step reveal"><div class="flow-num">3</div><div><h3>Every setting gets reviewed, then double-checked</h3><p>A full deterministic pass, and — if you've turned it on — an independent AI pass that catches more and verifies every result before it reaches you.</p></div></div>
+        <div class="flow-step reveal"><div class="flow-num">4</div><div><h3>You see it immediately</h3><p>Score, findings, and the riskiest attack path all ready the second the review finishes.</p></div></div>
+        <div class="flow-step reveal"><div class="flow-num">5</div><div><h3>Export when you're ready</h3><p>One click turns it into whatever format the person you're sending it to actually wants.</p></div></div>
+      </div>
+      <div class="how-visual reveal">
+        <div class="flow3d" id="flow3d">
+          <div class="flow3d-pulse" aria-hidden="true"></div>
+          <div class="flow3d-card" data-step="0" style="top:2%"><div class="f3-icon">📄</div><div class="f3-body"><div class="f3-label">Input</div><div class="f3-sub">File, live device, or a screen</div></div></div>
+          <div class="flow3d-card" data-step="1" style="top:22%"><div class="f3-icon">🔎</div><div class="f3-body"><div class="f3-label">Recognize</div><div class="f3-sub">Figures out the device type</div></div></div>
+          <div class="flow3d-card" data-step="2" style="top:42%"><div class="f3-icon">⚙️</div><div class="f3-body"><div class="f3-label">Review</div><div class="f3-sub">Deterministic pass + optional AI</div></div></div>
+          <div class="flow3d-card" data-step="3" style="top:62%"><div class="f3-icon">📊</div><div class="f3-body"><div class="f3-label">Results</div><div class="f3-sub">Score, findings, attack path</div></div></div>
+          <div class="flow3d-card" data-step="4" style="top:82%"><div class="f3-icon">📤</div><div class="f3-body"><div class="f3-label">Export</div><div class="f3-sub">Whatever format you need</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE NETWORK VISUAL -->
+  <section>
+    <div class="section-head reveal">
+      <span class="eyebrow2">Under the hood</span>
+      <h2>Sees how issues connect, not just where they are</h2>
+      <p>A single weak setting rarely matters on its own. ConfGoOne traces how findings chain together across a network — this is a live rendering of exactly that kind of graph.</p>
+    </div>
+    <div class="network-panel reveal">
+      <div class="panel-head">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <span class="label mono">attack-path.render()</span>
+      </div>
+      <canvas id="netcanvas"></canvas>
+      <div class="net-label" id="netLabelEntry">entry</div>
+      <div class="net-label" id="netLabelFoothold">foothold</div>
+      <div class="net-label" id="netLabelPivot">pivot</div>
+      <div class="net-label" id="netLabelLateralmove">lateral move</div>
+      <div class="net-label" id="netLabelTarget">target</div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <div class="trust reveal">
+    <div class="item">🔒 No config data leaves your machine</div>
+    <div class="item">🧩 Works fully offline</div>
+    <div class="item">🤖 AI is optional, never required</div>
+    <div class="item">🖥 Windows, with macOS in progress</div>
+  </div>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="section-head reveal">
+      <span class="eyebrow2">Pricing</span>
+      <h2>Start free. Upgrade when it's paying for itself.</h2>
+      <p>One license, activated on one machine. No subscription surprises — pick the term that fits and lock the rate in.</p>
+    </div>
+    <div class="toggle reveal" style="margin-bottom:14px" role="group" aria-label="Billing term">
+      <button class="active" data-term="monthly">Monthly</button>
+      <button data-term="sixmonth">6 Months <span class="save">Save 12%</span></button>
+      <button data-term="yearly">Yearly <span class="save">Save 21%</span></button>
+    </div>
+    <p class="reveal mono" style="font-size:12px;color:var(--chrome-dim);margin-bottom:44px">
+      Prices shown exclude tax — GST applies for customers billed in India.
+    </p>
+    <div class="plans reveal">
+      <div class="plan">
+        <div class="plan-body">
+          <h3>Free</h3>
+          <div class="price">$0</div>
+          <div class="term mono">forever</div>
+          <ul>
+            <li>Full deterministic review engine</li>
+            <li>3 scans, ever, to try it for real</li>
+            <li>CIS + NIST 800-53 compliance mapping</li>
+            <li>HTML report export</li>
+            <li>Community support</li>
+          </ul>
+          <a class="btn btn-ghost" href="#">Download</a>
+        </div>
+      </div>
+      <div class="plan featured">
+        <div class="plan-halo" aria-hidden="true"></div>
+        <div class="plan-body">
+          <h3>Pro</h3>
+          <div class="price" data-monthly="49" data-sixmonth="43" data-yearly="39"
+               data-billed-monthly="billed monthly" data-billed-sixmonth="billed $258 every 6 months" data-billed-yearly="billed $468 yearly">
+            $<span class="amount">49</span><sup class="perterm">/mo</sup> <span class="gst mono">+ GST</span>
+          </div>
+          <div class="term mono"><span class="billed">billed monthly</span> · one activation</div>
+          <ul>
+            <li>50 scans a month</li>
+            <li>All 16 compliance frameworks</li>
+            <li>Cloud AI + validation pass</li>
+            <li>Live scanning &amp; scheduled scans</li>
+            <li>Drift detection + remediation PRs</li>
+            <li>Cyber Risk Quantification</li>
+            <li>PDF, Word &amp; Excel export</li>
+            <li>Priority email support</li>
+          </ul>
+          <a class="btn btn-primary" href="#">Get Pro</a>
+        </div>
+      </div>
+      <div class="plan" data-accent="violet">
+        <div class="plan-body">
+        <h3>Enterprise</h3>
+        <div class="price" data-monthly="129" data-sixmonth="114" data-yearly="102"
+             data-billed-monthly="billed monthly" data-billed-sixmonth="billed $684 every 6 months" data-billed-yearly="billed $1,224 yearly">
+          $<span class="amount">129</span><sup class="perterm">/mo</sup> <span class="gst mono">+ GST</span>
+        </div>
+        <div class="term mono"><span class="billed">billed monthly</span> · one activation</div>
+        <ul>
+          <li>Unlimited scans</li>
+          <li>Multi-tenant / MSP mode</li>
+          <li>Cross-device attack chain analysis</li>
+          <li>Direct support channel</li>
+        </ul>
+        <a class="btn btn-ghost" href="#">Contact for Enterprise</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-band reveal">
+    <h2>See what's actually in your configs.</h2>
+    <p>Download it, open a file, and have a real answer in under a minute.</p>
+    <a class="btn btn-primary" href="#pricing">Download ConfGoOne →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div>
+      <div class="foot-brand"><img src="assets/logo.png" alt=""><span>ConfGoOne</span></div>
+      <div class="copyright">© <span id="year"></span> ConfGoOne. All rights reserved.</div>
+    </div>
+    <div class="links">
+      <a href="https://github.com/Ma5t3r5hadw/ConfGoOne/releases">Downloads</a>
+      <a href="#pricing">Pricing</a>
+      <a href="mailto:confgoone@gmail.com">Support</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// ── Hero 3D scene: a wireframe security "core" wrapped in an orbiting
+// particle network — genuine WebGL, not a CSS approximation. If the
+// Three.js CDN fails to load, this just no-ops and the ambient CSS
+// background behind it still carries the hero visually. ──
+(function () {
+  var stage = document.getElementById('heroStage');
+  var canvas = document.getElementById('hero3d');
+  if (!stage || !canvas || !window.THREE) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  camera.position.z = 5.2;
+
+  var core = new THREE.Group();
+  var wireMat = new THREE.MeshBasicMaterial({ color: 0x6fc3ff, wireframe: true, transparent: true, opacity: 0.55 });
+  core.add(new THREE.Mesh(new THREE.IcosahedronGeometry(1.3, 1), wireMat));
+  var fillMat = new THREE.MeshBasicMaterial({ color: 0x2f8ef4, transparent: true, opacity: 0.06, side: THREE.DoubleSide });
+  core.add(new THREE.Mesh(new THREE.IcosahedronGeometry(1.28, 1), fillMat));
+  scene.add(core);
+
+  // Points scattered on a sphere shell, manually (not Vector3.randomDirection,
+  // to avoid depending on a Three.js version that may not have it).
+  function randomOnSphere(radius) {
+    var u = Math.random(), v = Math.random();
+    var theta = 2 * Math.PI * u, phi = Math.acos(2 * v - 1);
+    return new THREE.Vector3(
+      radius * Math.sin(phi) * Math.cos(theta),
+      radius * Math.sin(phi) * Math.sin(theta),
+      radius * Math.cos(phi)
+    );
+  }
+  var netCount = 90;
+  var netPositions = new Float32Array(netCount * 3);
+  var netPts = [];
+  for (var i = 0; i < netCount; i++) {
+    var v = randomOnSphere(2.15 + Math.random() * 0.25);
+    netPositions[i * 3] = v.x; netPositions[i * 3 + 1] = v.y; netPositions[i * 3 + 2] = v.z;
+    netPts.push(v);
+  }
+  var netGeo = new THREE.BufferGeometry();
+  netGeo.setAttribute('position', new THREE.BufferAttribute(netPositions, 3));
+  var netPoints = new THREE.Points(netGeo, new THREE.PointsMaterial({
+    color: 0x8b7bff, size: 0.05, transparent: true, opacity: 0.85, sizeAttenuation: true
+  }));
+
+  var linePositions = [];
+  for (var a = 0; a < netCount; a++) {
+    for (var b = a + 1; b < netCount; b++) {
+      if (netPts[a].distanceTo(netPts[b]) < 0.85) {
+        linePositions.push(netPts[a].x, netPts[a].y, netPts[a].z, netPts[b].x, netPts[b].y, netPts[b].z);
+      }
+    }
+  }
+  var lineGeo = new THREE.BufferGeometry();
+  lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(linePositions), 3));
+  var netLines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({ color: 0x2f8ef4, transparent: true, opacity: 0.14 }));
+
+  var netGroup = new THREE.Group();
+  netGroup.add(netPoints, netLines);
+  scene.add(netGroup);
+
+  function resize() {
+    var r = stage.getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    camera.aspect = r.width / r.height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(r.width, r.height, false);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  var mouseX = 0, mouseY = 0, curX = 0, curY = 0;
+  stage.addEventListener('mousemove', function (e) {
+    var r = stage.getBoundingClientRect();
+    mouseX = (e.clientX - r.left) / r.width - 0.5;
+    mouseY = (e.clientY - r.top) / r.height - 0.5;
+  });
+
+  if (reduceMotion) {
+    core.rotation.set(0.4, -0.5, 0);
+    netGroup.rotation.set(0.2, 0.3, 0);
+    renderer.render(scene, camera);
+    return;
+  }
+
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY || 0;
+    var fade = Math.max(0, 1 - y / 700);
+    camera.position.z = 5.2 + (1 - fade) * 2.2;
+  }, { passive: true });
+
+  // Only render while the hero is actually on screen — this scene was
+  // running its rAF loop forever, even scrolled ten sections away, which
+  // was a real cost on top of everything else animating on the page.
+  var isVisible = true;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      isVisible = entries[0].isIntersecting;
+    }).observe(stage);
+  }
+
+  (function animate() {
+    requestAnimationFrame(animate);
+    if (!isVisible) return;
+    curX += (mouseX - curX) * 0.04;
+    curY += (mouseY - curY) * 0.04;
+    core.rotation.y += 0.0028;
+    core.rotation.x = curY * 0.6;
+    core.rotation.z = curX * 0.15;
+    netGroup.rotation.y -= 0.0012;
+    netGroup.rotation.x = -curY * 0.3;
+    renderer.render(scene, camera);
+  })();
+})();
+
+// ── "How it works" — the step list and the floating-card diagram beside
+// it share one active-step index, kept in sync by GSAP ScrollTrigger.
+// The cards themselves are plain CSS 3D (perspective + rotateY/translateZ)
+// rather than WebGL — legible labels beat abstract geometry here, and it
+// means one fewer renderer running on the page. ──
+window._howActiveStep = 0;
+(function () {
+  var steps = document.querySelectorAll('.flow-step');
+  var cards = document.querySelectorAll('.flow3d-card');
+  function setActive(i) {
+    window._howActiveStep = i;
+    cards.forEach(function (c) { c.classList.toggle('active', Number(c.dataset.step) === i); });
+  }
+  setActive(0);
+  if (!window.gsap || !window.ScrollTrigger) return;
+  steps.forEach(function (step, i) {
+    ScrollTrigger.create({
+      trigger: step, start: 'top 62%', end: 'bottom 42%',
+      toggleClass: { targets: step, className: 'active' },
+      onToggle: function (self) { if (self.isActive) setActive(i); }
+    });
+  });
+})();
+
+// ── Floating-card diagram: gentle idle bob per card (pure CSS, see
+// stylesheet) plus a mouse-driven tilt on the whole stack. ──
+(function () {
+  var host = document.querySelector('.how-visual');
+  var stage = document.getElementById('flow3d');
+  if (!host || !stage) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var rect = null;
+  host.addEventListener('mouseenter', function () {
+    rect = host.getBoundingClientRect();
+    stage.style.transition = 'transform .1s linear';
+  });
+  host.addEventListener('mousemove', function (e) {
+    if (!rect) rect = host.getBoundingClientRect();
+    var px = (e.clientX - rect.left) / rect.width - 0.5;
+    var py = (e.clientY - rect.top) / rect.height - 0.5;
+    stage.style.transform = 'rotateY(' + (px * 14) + 'deg) rotateX(' + (-py * 10) + 'deg)';
+  });
+  host.addEventListener('mouseleave', function () {
+    rect = null;
+    stage.style.transition = 'transform .6s cubic-bezier(.16,1,.3,1)';
+    stage.style.transform = '';
+  });
+})();
+
+// ── Score ring: counts up to 94 once the hero is on screen ──
+(function () {
+  var ring = document.getElementById('scoreRing');
+  var val = document.getElementById('scoreVal');
+  if (!ring || !val) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var target = 94;
+  if (reduceMotion) {
+    ring.style.setProperty('--pct', target);
+    val.textContent = target;
+    return;
+  }
+  var n = 0;
+  var iv = setInterval(function () {
+    n += 2;
+    if (n >= target) { n = target; clearInterval(iv); }
+    ring.style.setProperty('--pct', n);
+    val.textContent = n;
+  }, 28);
+})();
+
+// ── 3D tilt + cursor glare, applied to every card type on the page.
+// Icon/heading/list sit on separate translateZ planes (set in CSS), so
+// tilting the card visibly separates those layers instead of moving the
+// card as one flat sheet. ──
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var targets = document.querySelectorAll('.card, .plan');
+  targets.forEach(function (el) {
+    // The bounding rect is captured once on enter, not re-read on every
+    // mousemove — re-measuring layout on each event (right after writing
+    // a transform on the previous one) is what was actually causing the
+    // page to feel laggy while hovering cards.
+    var rect = null;
+    var pending = false;
+    var lastPx = 0.5, lastPy = 0.5;
+    el.addEventListener('mouseenter', function () {
+      rect = el.getBoundingClientRect();
+      el.style.transition = 'transform .1s linear';
+    });
+    el.addEventListener('mousemove', function (e) {
+      if (!rect) rect = el.getBoundingClientRect();
+      lastPx = (e.clientX - rect.left) / rect.width;
+      lastPy = (e.clientY - rect.top) / rect.height;
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () {
+        pending = false;
+        el.style.setProperty('--mx', (lastPx * 100) + '%');
+        el.style.setProperty('--my', (lastPy * 100) + '%');
+        if (reduceMotion) return;
+        var rx = (lastPx - 0.5) * 14;
+        var ry = (0.5 - lastPy) * 10;
+        el.style.transform = 'perspective(900px) rotateX(' + ry + 'deg) rotateY(' + rx + 'deg) translateY(-4px)';
+      });
+    });
+    el.addEventListener('mouseleave', function () {
+      rect = null;
+      el.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1)';
+      el.style.transform = '';
+      setTimeout(function () { el.style.transition = ''; }, 500);
+    });
+  });
+})();
+
+// ── Reveal-on-scroll — staged GSAP/ScrollTrigger entrance where the CDN
+// loaded, falling back to a plain IntersectionObserver fade otherwise. ──
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) { els.forEach(function (e) { e.style.opacity = 1; e.style.transform = 'none'; }); return; }
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    els.forEach(function (el) {
+      gsap.fromTo(el, { opacity: 0, y: 28 }, {
+        opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%' }
+      });
+    });
+    return;
+  }
+  if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(function (e) { io.observe(e); });
+})();
+
+// ── Feature rail: horizontal scroll-snap "coverflow" — cards tilt and dim
+// based on distance from the rail's center, replacing a static wall of
+// bullet points with something you actually move through. ──
+(function () {
+  var rail = document.getElementById('featureRail');
+  var dotsWrap = document.getElementById('railDots');
+  var prevBtn = document.querySelector('.rail-nav.prev');
+  var nextBtn = document.querySelector('.rail-nav.next');
+  if (!rail || !dotsWrap) return;
+  var cards = Array.prototype.slice.call(rail.querySelectorAll('.feat-card'));
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  cards.forEach(function (card, i) {
+    var glareRect = null;
+    card.addEventListener('mouseenter', function () { glareRect = card.getBoundingClientRect(); });
+    card.addEventListener('mousemove', function (e) {
+      if (!glareRect) glareRect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX - glareRect.left) / glareRect.width * 100) + '%');
+      card.style.setProperty('--my', ((e.clientY - glareRect.top) / glareRect.height * 100) + '%');
+    });
+    card.addEventListener('mouseleave', function () { glareRect = null; });
+    var dot = document.createElement('button');
+    dot.setAttribute('aria-label', 'Go to feature ' + (i + 1));
+    dot.addEventListener('click', function () {
+      card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    });
+    dotsWrap.appendChild(dot);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+
+  function update() {
+    var railRect = rail.getBoundingClientRect();
+    var center = railRect.left + railRect.width / 2;
+    var closest = 0, closestDist = Infinity;
+    cards.forEach(function (card, i) {
+      var r = card.getBoundingClientRect();
+      var cardCenter = r.left + r.width / 2;
+      var dist = (cardCenter - center) / railRect.width;
+      if (!reduceMotion) {
+        var rotate = Math.max(-28, Math.min(28, dist * 55));
+        var scale = Math.max(0.86, 1 - Math.abs(dist) * 0.28);
+        var opacity = Math.max(0.35, 1 - Math.abs(dist) * 0.9);
+        card.style.transform = 'perspective(1200px) rotateY(' + (-rotate) + 'deg) scale(' + scale + ')';
+        card.style.opacity = opacity;
+      }
+      var d = Math.abs(cardCenter - center);
+      if (d < closestDist) { closestDist = d; closest = i; }
+    });
+    dots.forEach(function (d, i) { d.classList.toggle('active', i === closest); });
+  }
+  var ticking = false;
+  rail.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () { update(); ticking = false; });
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+
+  if (prevBtn) prevBtn.addEventListener('click', function () { rail.scrollBy({ left: -336, behavior: 'smooth' }); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { rail.scrollBy({ left: 336, behavior: 'smooth' }); });
+})();
+
+// ── Pricing term toggle ── Always shows the per-month rate (so the
+// discount reads as "the number gets smaller"), with a "billed as" note
+// underneath spelling out the real total and cadence for that term.
+(function () {
+  var buttons = document.querySelectorAll('.toggle button');
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      buttons.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var term = btn.dataset.term;
+      document.querySelectorAll('.price[data-monthly]').forEach(function (p) {
+        p.querySelector('.amount').textContent = p.dataset[term];
+        p.querySelector('.perterm').textContent = '/mo';
+        var billedEl = p.parentElement.querySelector('.billed');
+        if (billedEl) billedEl.textContent = p.dataset['billed' + term.charAt(0).toUpperCase() + term.slice(1)];
+      });
+    });
+  });
+})();
+
+// ── Attack-graph diagram, in real 3D — same topology as the app's own
+// Attack Path tab (entry → pivot → target, best route highlighted with a
+// traveling pulse), now an actual floating network instead of a flat
+// canvas drawing. Falls back to a static single frame under reduced
+// motion, and only renders while the panel is on screen. ──
+(function () {
+  var panel = document.querySelector('.network-panel');
+  var canvas = document.getElementById('netcanvas');
+  if (!panel || !canvas || !window.THREE) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  camera.position.set(0, 2.1, 7.6);
+  camera.lookAt(0, -0.3, 0);
+
+  scene.add(new THREE.AmbientLight(0x4560a8, 0.85));
+  var key = new THREE.DirectionalLight(0xbcd8ff, 1.1);
+  key.position.set(3, 5, 4);
+  scene.add(key);
+  var rim = new THREE.PointLight(0x8b7bff, 1.3, 16);
+  rim.position.set(-4, -2, 3);
+  scene.add(rim);
+
+  // A full five-stage kill chain, not just entry→pivot→target — this is
+  // what actually fills the wide panel instead of a small cluster
+  // floating in empty space, and it tells the real story: several
+  // possible entry points, only one route through them is the dangerous
+  // one, and that's the one that's lit up.
+  var nodeDefs = [
+    { p: [-4.2, 1.3, 0.3], r: 0.14, label: 'entry' },
+    { p: [-4.2, 0, -0.5], r: 0.1 },
+    { p: [-4.2, -1.3, 0.3], r: 0.1 },
+    { p: [-2.1, 0.8, 0.2], r: 0.12, label: 'foothold' },
+    { p: [-2.1, -0.8, -0.35], r: 0.11 },
+    { p: [0, 0, 0], r: 0.22, label: 'pivot' },
+    { p: [2.1, 0.8, 0.3], r: 0.12, label: 'lateral move' },
+    { p: [2.1, -0.8, -0.2], r: 0.11 },
+    { p: [4.2, 0.6, 0], r: 0.2, label: 'target' },
+    { p: [4.2, -0.6, 0.3], r: 0.14 },
+  ];
+  var edges = [[0,3],[0,4],[1,3],[2,4],[3,5],[4,5],[5,6],[5,7],[6,8],[6,9],[7,8],[7,9]];
+  var bestPath = [0, 3, 5, 6, 8];
+
+  var group = new THREE.Group();
+  var nodeMeshes = nodeDefs.map(function (n, i) {
+    var onBest = bestPath.indexOf(i) !== -1;
+    var color = onBest ? 0x6fc3ff : 0x3a465f;
+    var mesh = new THREE.Mesh(
+      new THREE.SphereGeometry(n.r, 24, 24),
+      new THREE.MeshStandardMaterial({
+        color: color, emissive: onBest ? 0x2f8ef4 : 0x000000, emissiveIntensity: onBest ? 0.5 : 0,
+        roughness: 0.4, metalness: 0.35
+      })
+    );
+    mesh.position.set(n.p[0], n.p[1], n.p[2]);
+    group.add(mesh);
+    return mesh;
+  });
+
+  var dimPositions = [];
+  edges.forEach(function (e) {
+    var a = nodeDefs[e[0]].p, b = nodeDefs[e[1]].p;
+    dimPositions.push(a[0], a[1], a[2], b[0], b[1], b[2]);
+  });
+  var dimGeo = new THREE.BufferGeometry();
+  dimGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(dimPositions), 3));
+  group.add(new THREE.LineSegments(dimGeo, new THREE.LineBasicMaterial({ color: 0x9aa7c4, transparent: true, opacity: 0.16 })));
+
+  var bestPositions = [];
+  for (var i = 0; i < bestPath.length - 1; i++) {
+    var a = nodeDefs[bestPath[i]].p, b = nodeDefs[bestPath[i + 1]].p;
+    bestPositions.push(a[0], a[1], a[2], b[0], b[1], b[2]);
+  }
+  var bestGeo = new THREE.BufferGeometry();
+  bestGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(bestPositions), 3));
+  group.add(new THREE.LineSegments(bestGeo, new THREE.LineBasicMaterial({ color: 0x6fc3ff, transparent: true, opacity: 0.7 })));
+
+  var pulse = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16), new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.9 }));
+  group.add(pulse);
+  scene.add(group);
+
+  // Floor grid + a scatter of faint depth dust — fills the empty space
+  // around the graph with real 3D texture instead of bare dark canvas.
+  var floor = new THREE.GridHelper(14, 14, 0x2f8ef4, 0x1a2540);
+  floor.position.y = -2.3;
+  floor.material.transparent = true;
+  floor.material.opacity = 0.14;
+  scene.add(floor);
+
+  var dustCount = 60;
+  var dustPositions = new Float32Array(dustCount * 3);
+  for (var d = 0; d < dustCount; d++) {
+    dustPositions[d * 3] = (Math.random() - 0.5) * 13;
+    dustPositions[d * 3 + 1] = (Math.random() - 0.5) * 4 + 0.5;
+    dustPositions[d * 3 + 2] = (Math.random() - 0.5) * 5 - 1;
+  }
+  var dustGeo = new THREE.BufferGeometry();
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
+  scene.add(new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0x6fc3ff, size: 0.035, transparent: true, opacity: 0.35, sizeAttenuation: true })));
+
+  var labelEls = {
+    entry: document.getElementById('netLabelEntry'),
+    foothold: document.getElementById('netLabelFoothold'),
+    pivot: document.getElementById('netLabelPivot'),
+    'lateral move': document.getElementById('netLabelLateralmove'),
+    target: document.getElementById('netLabelTarget'),
+  };
+  var labelNodes = nodeDefs.map(function (n, i) { return n.label ? { i: i, key: n.label } : null; }).filter(Boolean);
+
+  function resize() {
+    var r = canvas.getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    camera.aspect = r.width / r.height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(r.width, r.height, false);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  var isVisible = true;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) { isVisible = entries[0].isIntersecting; }).observe(canvas);
+  }
+
+  var mouseX = 0, mouseY = 0, curX = 0, curY = 0;
+  panel.addEventListener('mousemove', function (e) {
+    var r = panel.getBoundingClientRect();
+    mouseX = (e.clientX - r.left) / r.width - 0.5;
+    mouseY = (e.clientY - r.top) / r.height - 0.5;
+  });
+
+  var worldPos = new THREE.Vector3();
+  function updateLabels() {
+    var r = canvas.getBoundingClientRect();
+    labelNodes.forEach(function (ln) {
+      var el = labelEls[ln.key];
+      if (!el) return;
+      nodeMeshes[ln.i].getWorldPosition(worldPos);
+      var ndc = worldPos.clone().project(camera);
+      // transform, not left/top — those are layout properties, and
+      // setting them 60x/sec forced a full reflow every animation frame.
+      var x = (ndc.x * 0.5 + 0.5) * r.width;
+      var y = (-ndc.y * 0.5 + 0.5) * r.height;
+      el.style.transform = 'translate(' + x + 'px,' + y + 'px) translate(-50%,-160%)';
+    });
+  }
+
+  if (reduceMotion) {
+    group.rotation.set(0.08, -0.2, 0);
+    renderer.render(scene, camera);
+    updateLabels();
+    return;
+  }
+
+  var t = 0;
+  (function animate() {
+    requestAnimationFrame(animate);
+    if (!isVisible) return;
+    t += 0.006;
+    curX += (mouseX - curX) * 0.05;
+    curY += (mouseY - curY) * 0.05;
+    group.rotation.y = Math.sin(t * 0.3) * 0.18 + curX * 0.25;
+    group.rotation.x = -curY * 0.15;
+
+    var total = bestPath.length - 1;
+    var f = (t % 3) / 3 * total;
+    var seg = Math.floor(f), frac = f - seg;
+    if (seg < total) {
+      var a = nodeMeshes[bestPath[seg]].position, b = nodeMeshes[bestPath[seg + 1]].position;
+      pulse.position.lerpVectors(a, b, frac);
+      pulse.visible = true;
+    } else { pulse.visible = false; }
+
+    renderer.render(scene, camera);
+    updateLabels();
+  })();
+})();
+</script>
+</body>
+</html>
