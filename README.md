@@ -168,11 +168,7 @@ There's no "start scan" button to remember — the review begins the instant you
 
 ## 📥 Download
 
-Grab the latest version from **[Releases](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest)**:
-
-| File | What it's for |
-|---|---|
-| `ConfGoOne-x.x.x.exe` | No install, no admin rights — just run it |
+**[Download ConfGoOne.exe](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest/download/ConfGoOne.exe)** — always the latest version. No install, no admin rights — just run it.
 
 Windows only for now, macOS in progress. It's a portable app, so check back here for new versions — there's no in-app update check yet.
 
