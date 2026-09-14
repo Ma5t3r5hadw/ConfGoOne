@@ -420,6 +420,13 @@ section{position:relative;padding:110px 0;border-top:1px solid var(--border)}
 .plan li::before{content:'';flex-shrink:0;width:16px;height:16px;margin-top:2px;border-radius:50%;
   background:rgba(61,220,151,.15);border:1px solid var(--good)}
 .plan .btn{width:100%;justify-content:center;text-align:center;transform:translateZ(18px)}
+.dl-form{display:flex;flex-direction:column;gap:10px;transform:translateZ(18px)}
+.dl-input{width:100%;height:44px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:100px;
+  padding:0 18px;color:var(--chrome-hi);font-family:var(--font-body);font-size:13.5px;outline:none;
+  transition:border-color .2s}
+.dl-input:focus{border-color:var(--border-hi)}
+.dl-input::placeholder{color:var(--chrome-dim)}
+.dl-submit{width:100%}
 
 /* ── Trust strip ── */
 .trust{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;padding:40px 0}
@@ -714,7 +721,12 @@ footer .copyright{font-family:var(--font-mono);font-size:12px;color:var(--chrome
             <li>HTML report export</li>
             <li>Community support</li>
           </ul>
-          <a class="btn btn-ghost" href="https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest">Download</a>
+          <a class="btn btn-ghost dl-trigger" href="https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest" id="dlTrigger">Download</a>
+          <form class="dl-form" id="dlForm" hidden>
+            <input type="text" class="dl-input" id="dlName" placeholder="Your name" required autocomplete="name">
+            <input type="email" class="dl-input" id="dlEmail" placeholder="you@email.com" required autocomplete="email">
+            <button type="submit" class="btn btn-primary dl-submit">Continue to download →</button>
+          </form>
         </div>
       </div>
       <div class="plan featured">
@@ -1126,6 +1138,38 @@ window._howActiveStep = 0;
         if (billedEl) billedEl.textContent = p.dataset['billed' + term.charAt(0).toUpperCase() + term.slice(1)];
       });
     });
+  });
+})();
+
+// ── Free-tier download gate — clicking "Download" reveals a tiny name +
+// email form instead of downloading immediately; submitting it fires the
+// welcome email (fire-and-forget, doesn't block the actual download) and
+// then sends the browser on to the real GitHub release. ──
+(function () {
+  var trigger = document.getElementById('dlTrigger');
+  var form = document.getElementById('dlForm');
+  if (!trigger || !form) return;
+  var downloadUrl = trigger.getAttribute('href');
+
+  trigger.addEventListener('click', function (e) {
+    e.preventDefault();
+    trigger.hidden = true;
+    form.hidden = false;
+    document.getElementById('dlName').focus();
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('dlName').value.trim();
+    var email = document.getElementById('dlEmail').value.trim();
+    if (name && email) {
+      fetch('https://confgoone-webhook.vercel.app/api/download-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email }),
+      }).catch(function () {});
+    }
+    window.location.href = downloadUrl;
   });
 })();
 
