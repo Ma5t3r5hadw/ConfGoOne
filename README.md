@@ -46,6 +46,7 @@ Give ConfGoOne a configuration — from a file, a live device, or a pasted scrip
 | ⚡ **Attack Path** | How small issues chain into a real breach, ranked by how dangerous each route actually is. |
 | 📊 **Report** | A polished document in one click, in whatever format the reader actually wants. |
 | 💬 **AI Assistant** | Ask questions about your own configuration in plain English — every answer is checked before you see it. |
+| 📸 **Live Screen Capture** | No config export, no CLI access — point it at a live screen and it reads and reviews what's on it. |
 
 <br>
 
