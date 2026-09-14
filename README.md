@@ -142,7 +142,7 @@ One license unlocks all of it — no add-on packs, no feature paywall inside the
 - Open a file, paste output, connect live, or capture a live screen — however you can reach it
 - Runs entirely offline by default; nothing leaves your machine unless you turn AI on
 - Light and dark themes
-- Updates itself — Windows and macOS, with Linux underway
+- Portable — no install, no admin rights, just run it. Windows and macOS, with Linux underway
 
 </details>
 
@@ -168,14 +168,13 @@ There's no "start scan" button to remember — the review begins the instant you
 
 ## 📥 Download
 
-Grab the latest installer from **[Releases](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest)**:
+Grab the latest version from **[Releases](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest)**:
 
 | File | What it's for |
 |---|---|
-| `ConfGoOne-Setup-x.x.x.exe` | Standard installer — recommended for most people |
 | `ConfGoOne-vx.x.x-portable.exe` | No install, no admin rights — just run it |
 
-Windows only for now, macOS in progress. The app checks for updates on its own — no need to come back here for every release.
+Windows only for now, macOS in progress. It's a portable app, so check back here for new versions — there's no in-app update check yet.
 
 <br>
 
