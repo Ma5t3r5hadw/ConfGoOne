@@ -172,7 +172,7 @@ Grab the latest version from **[Releases](https://github.com/Ma5t3r5hadw/ConfGoO
 
 | File | What it's for |
 |---|---|
-| `ConfGoOne-vx.x.x-portable.exe` | No install, no admin rights — just run it |
+| `ConfGoOne-x.x.x.exe` | No install, no admin rights — just run it |
 
 Windows only for now, macOS in progress. It's a portable app, so check back here for new versions — there's no in-app update check yet.
 
