@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — ConfGoOne</title>
+<meta name="description" content="How ConfGoOne handles your data — and how little of it there is to handle.">
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#020306; --panel:#0d121e; --panel-hi:#131b2b;
+  --border:rgba(154,168,196,.14); --border-hi:rgba(111,195,255,.4);
+  --chrome-hi:#f6f9fd; --chrome-mid:#9aa7bc; --chrome-dim:#7683a0;
+  --signal:#2f8ef4; --signal-bright:#6fc3ff; --signal-violet:#8b7bff; --good:#3ddc97;
+  --font-display:'Bricolage Grotesque',sans-serif;
+  --font-body:'Plus Jakarta Sans',-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--void);color:var(--chrome-mid);font-family:var(--font-body);font-size:15.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:var(--font-display);color:var(--chrome-hi);letter-spacing:-.02em}
+a{color:var(--signal-bright);text-decoration:none}
+a:hover{text-decoration:underline}
+.mono{font-family:var(--font-mono)}
+.nav{display:flex;align-items:center;gap:11px;padding:20px 48px;border-bottom:1px solid var(--border)}
+.nav img{width:30px;height:30px}
+.nav span{font-family:var(--font-display);font-weight:700;font-size:16px;color:var(--chrome-hi)}
+.wrap{max-width:720px;margin:0 auto;padding:64px 24px 100px}
+.updated{font-family:var(--font-mono);font-size:12px;color:var(--signal-bright);letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px;display:block}
+h1{font-size:36px;margin-bottom:8px}
+.lede{color:var(--chrome-mid);font-size:16px;margin-bottom:44px}
+h2{font-size:20px;margin:38px 0 12px}
+p,li{font-size:14.5px;color:var(--chrome-mid)}
+ul{margin:0 0 16px 20px}
+li{margin-bottom:8px}
+.card{background:linear-gradient(160deg,var(--panel-hi),var(--panel));border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin:24px 0}
+.card p{margin:0;color:var(--chrome-hi);font-size:14px}
+footer{border-top:1px solid var(--border);padding:32px 48px;text-align:center}
+footer a{margin:0 10px;font-size:13px;color:var(--chrome-mid)}
+footer .copy{font-family:var(--font-mono);font-size:11.5px;color:var(--chrome-dim);margin-top:14px}
+@media (max-width:600px){ .nav,footer{padding:18px 22px} .wrap{padding:44px 20px 70px} h1{font-size:28px} }
+</style>
+</head>
+<body>
+<a class="nav" href="index.html"><img src="assets/logo.png" alt=""><span>ConfGoOne</span></a>
+
+<div class="wrap">
+  <span class="updated">Last updated · September 2026</span>
+  <h1>Privacy Policy</h1>
+  <p class="lede">The short version: ConfGoOne runs entirely on your machine. There's almost nothing to have a privacy policy about — but here's the exact, complete list of what does leave your computer, and when.</p>
+
+  <div class="card">
+    <p>We do not collect analytics, telemetry, or usage data of any kind, ever. Nothing about how you use the app — what you scan, what it finds, how often you open it — is transmitted anywhere.</p>
+  </div>
+
+  <h2>What we collect, and why</h2>
+  <p>Only two situations send any data outside your machine:</p>
+  <ul>
+    <li><b>Buying a license.</b> When you purchase Pro or Enterprise, our payment processor (Razorpay) and email provider (Resend) receive your email address, your Machine ID (a short code derived from your computer's hardware, not personally identifying on its own), and payment details handled entirely by Razorpay — we never see or store your card details. This is used solely to generate and deliver your license key, and is kept as our sales record.</li>
+    <li><b>Using the optional AI feature.</b> If you turn on AI-assisted analysis and configure your own API key for a provider (OpenAI, Anthropic, Gemini, OpenRouter, NVIDIA NIM, or a self-hosted endpoint), the relevant configuration content is sent directly from your machine to that provider, under whatever privacy terms they publish. This is entirely optional, off by default, and never proxied through us — we don't see this data either. Using a local model through Ollama sends nothing anywhere.</li>
+  </ul>
+
+  <h2>What we never see</h2>
+  <ul>
+    <li>The actual contents of any configuration file, device connection, screen capture, or scan you run — this is processed and stored locally on your machine only</li>
+    <li>Your findings, reports, scan history, or suppressed-findings list</li>
+    <li>Your card or bank details — Razorpay handles payment entirely; we only receive confirmation that a payment succeeded</li>
+  </ul>
+
+  <h2>How long we keep it</h2>
+  <p>The sale record (your email, Machine ID, and which license you bought) is kept indefinitely for support and license-reissue purposes — for example, if you get a new computer and need your key reissued. You can ask us to delete this record at any time by emailing us; note that doing so may mean we can no longer verify or reissue your license.</p>
+
+  <h2>Third parties involved</h2>
+  <ul>
+    <li><b>Razorpay</b> — payment processing. See <a href="https://razorpay.com/privacy/" target="_blank" rel="noopener">Razorpay's privacy policy</a>.</li>
+    <li><b>Resend</b> — delivers the email containing your license key. See <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener">Resend's privacy policy</a>.</li>
+    <li><b>GitHub</b> — hosts the app installer for download and checks for updates. No account or login is required to download or update.</li>
+  </ul>
+
+  <h2>Your rights</h2>
+  <p>Since we hold almost no data about you beyond a sale record, there's little to request — but you can ask us at any time to see, correct, or delete what we have. Contact us at <a href="mailto:confgoone@gmail.com">confgoone@gmail.com</a>.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If this ever changes — for example, if we add a feature that sends more data somewhere — we'll update this page and change the "Last updated" date above.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy: <a href="mailto:confgoone@gmail.com">confgoone@gmail.com</a>.</p>
+</div>
+
+<footer>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="refund.html">Refund Policy</a>
+    <a href="mailto:confgoone@gmail.com">Support</a>
+  </div>
+  <div class="copy">© <span id="year"></span> ConfGoOne. All rights reserved.</div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
