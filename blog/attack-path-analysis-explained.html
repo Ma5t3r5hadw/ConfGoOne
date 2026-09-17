@@ -56,6 +56,19 @@
     </ul>
     <p>Scored separately, none of these screams "fix this today." Chained together, they're a full path: brute-force the VPN (no lockout), land on the internal VLAN, read the device's running config over SNMP with the default string, find the management interface is reachable from there too, and now you have administrative access to the firewall itself. That's a materially different risk than "three medium/high findings" suggests — and it's invisible if you only ever look at findings one at a time.</p>
 
+    <div class="diagram">
+      <div class="chain">
+        <div class="chain-node"><span class="sev high">Step 1 · High</span><span class="label">No lockout on VPN auth — brute-forced</span></div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node"><span class="sev med">Step 2 · Medium</span><span class="label">Weak SNMP string reveals running config</span></div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node"><span class="sev med">Step 3 · Medium</span><span class="label">Mgmt interface reachable from that VLAN</span></div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node result"><span class="sev crit">Result · Critical</span><span class="label">Full administrative access to the firewall</span></div>
+      </div>
+      <div class="dcaption">Three standalone Medium/High findings, chained into one Critical outcome</div>
+    </div>
+
     <h2>What attack path analysis actually does</h2>
     <p>It's the same idea behind MITRE ATT&CK-style thinking, applied directly to your own findings instead of a generic technique library: take the full set of failed checks from a scan, and look for combinations where one finding's impact becomes the next finding's entry condition. Weak authentication becomes initial access. A missing segmentation control becomes lateral movement. An overprivileged service account becomes escalation. Chain enough of these and you get an actual path from "attacker has network access" to "attacker has domain admin" or "attacker has the firewall."</p>
     <p>The output isn't another severity score — it's a narrative: step 1 does this, which enables step 2, which enables step 3, with the real finding IDs and evidence backing each step. That's a fundamentally more useful thing to hand to whoever decides what gets fixed first, because it answers "why does this matter" instead of just "how bad is this."</p>

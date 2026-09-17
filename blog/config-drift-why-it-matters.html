@@ -50,6 +50,26 @@
     <h2>Audits are a snapshot. Production isn't.</h2>
     <p>A config audit answers one question: is this device compliant <em>right now, at the moment I ran the scan</em>. That's genuinely useful, and it's also the entire limitation in one sentence. A router or firewall in active use gets touched constantly — a contractor troubleshoots something and leaves a temporary rule in place, an engineer opens a port for a one-off test and forgets to close it, a change gets pushed under time pressure without going through review, a "temporary" ACL exception from eighteen months ago is still there. None of that shows up anywhere unless someone happens to re-run the audit and happens to compare it against the last one, line by line, on their own.</p>
 
+    <div class="diagram">
+      <div class="timeline-row">
+        <div class="trow-label">Quarterly audit only</div>
+        <div class="timeline-track">
+          <div class="timeline-point good" style="left:0%"><span class="tp-label">Audit<br>passes</span></div>
+          <div class="timeline-point bad" style="left:38%"><span class="tp-label">Config<br>quietly changes</span></div>
+          <div class="timeline-point bad" style="left:96%"><span class="tp-label">Caught 90 days<br>later, if at all</span></div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="trow-label">With drift detection</div>
+        <div class="timeline-track">
+          <div class="timeline-point good" style="left:0%"><span class="tp-label">Audit<br>passes</span></div>
+          <div class="timeline-point bad" style="left:38%"><span class="tp-label">Config<br>quietly changes</span></div>
+          <div class="timeline-point good" style="left:44%"><span class="tp-label">Flagged the<br>same day</span></div>
+        </div>
+      </div>
+      <div class="dcaption">The change is identical in both rows — only the time-to-detection differs</div>
+    </div>
+
     <h2>What drift detection actually checks</h2>
     <p>Drift detection flips the question from "is this compliant" to "did this change, and does the change matter." It keeps a baseline of a device's last-known-good configuration and, on whatever schedule you set, pulls the current config and diffs it — not a raw text diff (which drowns you in noise from timestamp comments and interface counters), but a structural diff that understands what changed semantically: a new ACL rule, a modified access-class binding, a service that got re-enabled, a password policy that got loosened.</p>
     <p>Every detected change gets re-evaluated against the same rule set the original audit used. A change that doesn't affect any control is just noise — logged, not flagged. A change that reopens a finding that was previously fixed, or introduces a new one, gets surfaced immediately instead of waiting for the next scheduled audit to stumble onto it.</p>

@@ -47,6 +47,37 @@
     <h1>10 network device hardening checks most audits skip</h1>
     <p class="lede">Password complexity, banner text, NTP sync — every audit checks these, and they should. But a lot of real exposure hides in the checks that don't make the standard list. Here are ten that consistently get missed, and why each one is worth the five minutes it takes to fix.</p>
 
+    <div class="diagram">
+      <div class="group-grid">
+        <div class="group-card">
+          <div class="glabel">Exposure surface</div>
+          <ul>
+            <li>1 · Source routing / directed broadcast</li>
+            <li>2 · CDP/LLDP on external interfaces</li>
+            <li>7 · Legacy services left on by inheritance</li>
+          </ul>
+        </div>
+        <div class="group-card">
+          <div class="glabel">Authentication &amp; access</div>
+          <ul>
+            <li>3 · SNMP string with no ACL</li>
+            <li>4 · Console/AUX with no timeout</li>
+            <li>9 · VTY with no access-class</li>
+            <li>10 · SNMPv1/v2c left enabled</li>
+          </ul>
+        </div>
+        <div class="group-card">
+          <div class="glabel">Visibility &amp; resilience</div>
+          <ul>
+            <li>5 · NTP without authentication</li>
+            <li>6 · No remote syslog destination</li>
+            <li>8 · Missing Control Plane Policing</li>
+          </ul>
+        </div>
+      </div>
+      <div class="dcaption">The ten checks below, grouped by what they actually protect against</div>
+    </div>
+
     <h2>1. IP source routing and directed broadcast</h2>
     <p><code>ip source-route</code> and <code>ip directed-broadcast</code> are legacy features that let a packet dictate its own path through the network, or let a single packet fan out to every host on a broadcast segment. Neither has a legitimate modern use case, and both are classic amplification/spoofing primitives. They're off by default on current IOS releases — but "default" configs inherited from a device imaged years ago, or migrated from an older platform, often still have them explicitly enabled.</p>
 
