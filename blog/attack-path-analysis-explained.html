@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Is Attack Path Analysis? — ConfGoOne Blog</title>
+<meta name="description" content="A findings list tells you what's wrong. Attack path analysis tells you which findings chain together into a real breach. Here's how it works and why it matters.">
+<link rel="canonical" href="https://confgoone.com/blog/attack-path-analysis-explained.html">
+<link rel="icon" href="../assets/logo.png">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ConfGoOne">
+<meta property="og:title" content="What Is Attack Path Analysis (and Why a Findings List Isn't Enough)">
+<meta property="og:description" content="A findings list tells you what's wrong. Attack path analysis tells you which findings chain together into a real breach.">
+<meta property="og:image" content="https://confgoone.com/assets/logo.png">
+<meta property="og:url" content="https://confgoone.com/blog/attack-path-analysis-explained.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="What Is Attack Path Analysis (and Why a Findings List Isn't Enough)">
+<meta name="twitter:description" content="A findings list tells you what's wrong. Attack path analysis tells you what it adds up to.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "What Is Attack Path Analysis (and Why a Findings List Isn't Enough)",
+  "datePublished": "2026-08-27",
+  "author": { "@type": "Organization", "name": "ConfGoOne" },
+  "publisher": { "@type": "Organization", "name": "ConfGoOne" }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+<div class="nav">
+  <img src="../assets/logo.png" alt="">
+  <span>ConfGoOne</span>
+  <a class="back" href="index.html">← Blog</a>
+</div>
+
+<div class="wrap">
+  <article>
+    <div class="article-meta"><span>Aug 27, 2026</span><span class="dot">·</span><span>Attack Paths</span><span class="dot">·</span><span>6 min read</span></div>
+    <h1>What is attack path analysis (and why a findings list isn't enough)</h1>
+    <p class="lede">A scan comes back with 40 findings, sorted by CVSS score. Three critical, eleven high, the rest medium and low. Where do you start? The severity column answers "how bad is this in isolation" — it can't answer the question that actually matters: what can an attacker <em>do</em> with these, together?</p>
+
+    <h2>The gap between a findings list and a real risk picture</h2>
+    <p>Take three findings from a typical firewall + VPN concentrator audit, none of them individually catastrophic:</p>
+    <ul>
+      <li>A management interface reachable from an internal VLAN it shouldn't be (Medium)</li>
+      <li>SNMP running with a default or weak community string (Medium)</li>
+      <li>No lockout policy on remote-access VPN authentication (High)</li>
+    </ul>
+    <p>Scored separately, none of these screams "fix this today." Chained together, they're a full path: brute-force the VPN (no lockout), land on the internal VLAN, read the device's running config over SNMP with the default string, find the management interface is reachable from there too, and now you have administrative access to the firewall itself. That's a materially different risk than "three medium/high findings" suggests — and it's invisible if you only ever look at findings one at a time.</p>
+
+    <h2>What attack path analysis actually does</h2>
+    <p>It's the same idea behind MITRE ATT&CK-style thinking, applied directly to your own findings instead of a generic technique library: take the full set of failed checks from a scan, and look for combinations where one finding's impact becomes the next finding's entry condition. Weak authentication becomes initial access. A missing segmentation control becomes lateral movement. An overprivileged service account becomes escalation. Chain enough of these and you get an actual path from "attacker has network access" to "attacker has domain admin" or "attacker has the firewall."</p>
+    <p>The output isn't another severity score — it's a narrative: step 1 does this, which enables step 2, which enables step 3, with the real finding IDs and evidence backing each step. That's a fundamentally more useful thing to hand to whoever decides what gets fixed first, because it answers "why does this matter" instead of just "how bad is this."</p>
+
+    <h2>Why this doesn't replace a findings list — it prioritizes it</h2>
+    <p>Not every finding is part of a path, and that's useful information too. A finding with no plausible chain to anything else genuinely is lower priority than one sitting in the middle of a three-step path to a critical system, even if their standalone severity scores say otherwise. Attack path analysis re-sorts the pile by "how much does fixing this actually reduce risk," which is rarely the same order as "how bad does this look by itself."</p>
+
+    <h2>What it needs to work</h2>
+    <p>This only works if the underlying findings are trustworthy — real evidence pulled from the actual config, not a guess. Chaining three real findings into an accurate attack narrative is useful. Chaining three <em>hallucinated</em> findings into a confident-sounding narrative is actively worse than not having one, because it looks authoritative while pointing everyone at the wrong problem. Any tool doing this needs a hard gate between "the model suggested this" and "this is backed by a real line in the config" — the analysis is only as good as what it's built on.</p>
+
+    <div class="cta-box">
+      <h3>See your own attack paths</h3>
+      <p>ConfGoOne's Attack Path tab chains real findings from your scan into ranked, evidence-backed paths — not generic scenarios.</p>
+      <a class="btn" href="../index.html#pricing">Try ConfGoOne →</a>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to all posts</a>
+  </article>
+</div>
+
+<footer>
+  <div>
+    <a href="../index.html">Home</a>
+    <a href="index.html">Blog</a>
+    <a href="../privacy.html">Privacy</a>
+    <a href="../terms.html">Terms</a>
+    <a href="mailto:confgoone@gmail.com">Support</a>
+  </div>
+  <div class="copy">© <span id="year"></span> ConfGoOne. All rights reserved.</div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIS Controls vs. NIST 800-53 vs. PCI-DSS Compared — ConfGoOne Blog</title>
+<meta name="description" content="Three security frameworks, three different jobs. A practical comparison of CIS Controls, NIST 800-53, and PCI-DSS — scope, structure, enforcement, and how they overlap.">
+<link rel="canonical" href="https://confgoone.com/blog/cis-nist-pci-dss-compared.html">
+<link rel="icon" href="../assets/logo.png">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ConfGoOne">
+<meta property="og:title" content="CIS Controls vs. NIST 800-53 vs. PCI-DSS: How They Actually Differ">
+<meta property="og:description" content="Three security frameworks, three different jobs. A practical comparison — scope, structure, enforcement, and how they overlap.">
+<meta property="og:image" content="https://confgoone.com/assets/logo.png">
+<meta property="og:url" content="https://confgoone.com/blog/cis-nist-pci-dss-compared.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CIS Controls vs. NIST 800-53 vs. PCI-DSS: How They Actually Differ">
+<meta name="twitter:description" content="Three security frameworks, three different jobs, compared practically.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "CIS Controls vs. NIST 800-53 vs. PCI-DSS: How They Actually Differ",
+  "datePublished": "2026-08-20",
+  "author": { "@type": "Organization", "name": "ConfGoOne" },
+  "publisher": { "@type": "Organization", "name": "ConfGoOne" }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+<div class="nav">
+  <img src="../assets/logo.png" alt="">
+  <span>ConfGoOne</span>
+  <a class="back" href="index.html">← Blog</a>
+</div>
+
+<div class="wrap">
+  <article>
+    <div class="article-meta"><span>Aug 20, 2026</span><span class="dot">·</span><span>Frameworks</span><span class="dot">·</span><span>7 min read</span></div>
+    <h1>CIS Controls vs. NIST 800-53 vs. PCI-DSS: how they actually differ</h1>
+    <p class="lede">"We're NIST-aligned" is not the same sentence as "we're PCI-compliant," and neither one means you've implemented CIS Controls. These three show up in almost every security conversation, and they get treated as interchangeable more often than they should. They're not. They solve different problems for different audiences.</p>
+
+    <h2>The one-sentence version of each</h2>
+    <ul>
+      <li><strong>CIS Controls</strong> — a prioritized, practical checklist of what to do first. Built by practitioners, for practitioners.</li>
+      <li><strong>NIST 800-53</strong> — an exhaustive catalog of controls, built for U.S. federal systems, now used far beyond government wherever rigor and auditability matter.</li>
+      <li><strong>PCI-DSS</strong> — a mandatory standard with one specific job: protect cardholder data. If you touch credit card numbers, this isn't optional.</li>
+    </ul>
+
+    <h2>CIS Controls — the "start here" framework</h2>
+    <p>The CIS Critical Security Controls (now just "CIS Controls," currently at version 8) exist because most breaches trace back to a small number of missing basics — not exotic zero-days. There are 18 controls, from asset inventory (Control 1) through penetration testing (Control 18), and they're grouped into three <strong>Implementation Groups</strong> (IG1, IG2, IG3) so a five-person company and a five-thousand-person enterprise aren't held to the same bar.</p>
+    <p>CIS is voluntary, free to read, and written in plain language — "establish and maintain an inventory of enterprise assets," not "in accordance with FIPS 199 categorization." It's the easiest of the three to actually start implementing this week.</p>
+
+    <h2>NIST 800-53 — the exhaustive one</h2>
+    <p>Don't confuse this with the <strong>NIST Cybersecurity Framework (CSF)</strong>, which is a five-function model (Identify, Protect, Detect, Respond, Recover) sitting at a much higher level. NIST <strong>800-53</strong> is a control catalog — over a thousand individual controls organized into 20 families (Access Control, Audit and Accountability, Configuration Management, System and Communications Protection, and so on), each with a baseline for Low, Moderate, or High-impact systems.</p>
+    <p>It was written for federal information systems (FISMA compliance) and anyone selling to the federal government (FedRAMP is built directly on top of it), but its influence runs much wider — plenty of private-sector security programs use 800-53 as their control baseline even with zero federal obligation, because it's the most complete public catalog that exists.</p>
+
+    <h2>PCI-DSS — the mandatory one</h2>
+    <p>PCI-DSS (Payment Card Industry Data Security Standard, currently version 4.0) is different in kind from the other two: it's not a menu you pick from. If your systems store, process, or transmit cardholder data, compliance is a contractual requirement from the card brands (Visa, Mastercard, etc.), not a best-practice recommendation. It has 12 top-level requirements — network segmentation, encryption of cardholder data, restricting access by need-to-know, logging, regular testing — and depending on your transaction volume, you're either self-attesting via a Self-Assessment Questionnaire or being audited by a Qualified Security Assessor.</p>
+    <p>Miss it, and the consequences aren't hypothetical: fines, increased transaction fees, or losing the ability to process cards at all.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <tr><th></th><th>CIS Controls</th><th>NIST 800-53</th><th>PCI-DSS</th></tr>
+      <tr><td><strong>Who it's for</strong></td><td>Anyone, any size</td><td>Federal systems + FedRAMP; widely adopted elsewhere</td><td>Anyone handling card data</td></tr>
+      <tr><td><strong>Mandatory?</strong></td><td>No — voluntary best practice</td><td>Yes, for federal/FedRAMP systems</td><td>Yes, contractually, via card brands</td></tr>
+      <tr><td><strong>Size</strong></td><td>18 controls</td><td>1,000+ controls, 20 families</td><td>12 requirements</td></tr>
+      <tr><td><strong>Enforced by</strong></td><td>Nobody — self-directed</td><td>Federal auditors / 3PAOs (FedRAMP)</td><td>QSAs or self-assessment</td></tr>
+      <tr><td><strong>Best for</strong></td><td>"Where do we even start"</td><td>Comprehensive, auditable control baselines</td><td>Cardholder-data environments specifically</td></tr>
+    </table>
+
+    <h2>Where they overlap — and where a tool actually helps</h2>
+    <p>Here's the part that makes compliance work genuinely tedious: the same technical control — say, "disable unused services on network devices" — shows up in CIS Control 4, NIST 800-53's <code>CM-7</code>, and PCI-DSS Requirement 2.2, worded three different ways, filed under three different names. A misconfigured SSH cipher suite might fail all three at once, or fail one and pass the other two depending on exact wording. Mapping a single finding to all the frameworks you're on the hook for, by hand, for every device, is the part nobody enjoys.</p>
+    <p>That mapping is mechanical, not judgment-based — which is exactly the kind of thing worth automating. ConfGoOne scans a config once and tags every finding against CIS, NIST 800-53, PCI-DSS, ISO 27001, HIPAA, and SOC 2 simultaneously, so "which frameworks does this one misconfiguration violate" stops being a research project.</p>
+
+    <div class="cta-box">
+      <h3>See it mapped against your own configs</h3>
+      <p>Free tier includes 3 scans, no account required.</p>
+      <a class="btn" href="../index.html#pricing">Try ConfGoOne →</a>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to all posts</a>
+  </article>
+</div>
+
+<footer>
+  <div>
+    <a href="../index.html">Home</a>
+    <a href="index.html">Blog</a>
+    <a href="../privacy.html">Privacy</a>
+    <a href="../terms.html">Terms</a>
+    <a href="mailto:confgoone@gmail.com">Support</a>
+  </div>
+  <div class="copy">© <span id="year"></span> ConfGoOne. All rights reserved.</div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

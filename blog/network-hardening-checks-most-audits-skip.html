@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 Network Device Hardening Checks Most Audits Skip — ConfGoOne Blog</title>
+<meta name="description" content="Password complexity and NTP get checked every time. These ten hardening checks don't, and they're where real compromises start.">
+<link rel="canonical" href="https://confgoone.com/blog/network-hardening-checks-most-audits-skip.html">
+<link rel="icon" href="../assets/logo.png">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ConfGoOne">
+<meta property="og:title" content="10 Network Device Hardening Checks Most Audits Skip">
+<meta property="og:description" content="The obvious stuff gets checked every time. These ten don't, and they're where real compromises start.">
+<meta property="og:image" content="https://confgoone.com/assets/logo.png">
+<meta property="og:url" content="https://confgoone.com/blog/network-hardening-checks-most-audits-skip.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="10 Network Device Hardening Checks Most Audits Skip">
+<meta name="twitter:description" content="The obvious stuff gets checked every time. These ten don't.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "10 Network Device Hardening Checks Most Audits Skip",
+  "datePublished": "2026-09-17",
+  "author": { "@type": "Organization", "name": "ConfGoOne" },
+  "publisher": { "@type": "Organization", "name": "ConfGoOne" }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+<div class="nav">
+  <img src="../assets/logo.png" alt="">
+  <span>ConfGoOne</span>
+  <a class="back" href="index.html">← Blog</a>
+</div>
+
+<div class="wrap">
+  <article>
+    <div class="article-meta"><span>Sep 17, 2026</span><span class="dot">·</span><span>Hardening</span><span class="dot">·</span><span>7 min read</span></div>
+    <h1>10 network device hardening checks most audits skip</h1>
+    <p class="lede">Password complexity, banner text, NTP sync — every audit checks these, and they should. But a lot of real exposure hides in the checks that don't make the standard list. Here are ten that consistently get missed, and why each one is worth the five minutes it takes to fix.</p>
+
+    <h2>1. IP source routing and directed broadcast</h2>
+    <p><code>ip source-route</code> and <code>ip directed-broadcast</code> are legacy features that let a packet dictate its own path through the network, or let a single packet fan out to every host on a broadcast segment. Neither has a legitimate modern use case, and both are classic amplification/spoofing primitives. They're off by default on current IOS releases — but "default" configs inherited from a device imaged years ago, or migrated from an older platform, often still have them explicitly enabled.</p>
+
+    <h2>2. CDP/LLDP running on external-facing interfaces</h2>
+    <p>Cisco Discovery Protocol and its standards-based cousin LLDP broadcast the device's model, software version, and hostname to anything on the same segment — genuinely useful on internal trunk links, and genuinely a reconnaissance gift on any interface facing a partner network, a colo cross-connect, or the internet. It's rarely disabled per-interface because it's rarely reviewed per-interface.</p>
+
+    <h2>3. SNMP community strings without an ACL</h2>
+    <p>Everyone checks for <code>public</code>/<code>private</code> as the community string. Fewer check whether a properly renamed, non-default community string is still reachable from anywhere on the network. A strong community string with no source restriction is still fully exposed to anyone who can reach the device on UDP 161 — the string being hard to guess doesn't help if it can be sniffed or brute-forced at leisure.</p>
+
+    <h2>4. Console and AUX ports without a session timeout</h2>
+    <p>VTY (remote) lines almost always get an <code>exec-timeout</code> review. Console and AUX ports — physical access points — get skipped far more often, on the assumption that physical access is already a trust boundary. It isn't always: shared colo racks, branch offices with less physical security, and third-party maintenance access all make an unattended, un-timed-out console session a real risk.</p>
+
+    <h2>5. NTP without authentication</h2>
+    <p>Time sync itself gets checked constantly — "is NTP configured" is table stakes. Whether that NTP session is <em>authenticated</em> is checked far less. An attacker who can spoof your time source can push a device's clock backward or forward enough to break certificate validation, desynchronize log correlation across devices, or undermine time-based access controls — all without touching the device's actual config.</p>
+
+    <h2>6. Local logging with no remote syslog destination</h2>
+    <p>Logging enabled, buffer size configured, severity level set — all standard checks. Whether those logs actually leave the device is checked less. A local buffer wraps under load (or a targeted flood), and once it wraps, that history is gone. If the only copy of "what happened right before this incident" lived on the device that got compromised, you likely don't have it anymore.</p>
+
+    <h2>7. Legacy services left on by inheritance</h2>
+    <p>Smart Install client, the TCP/UDP "small servers," BOOTP server, PAD, Finger — a long tail of protocols that shipped enabled on older IOS defaults and get carried forward every time a config is copied to a new device rather than rebuilt from a current hardening baseline. Smart Install specifically has a well-documented history of remote code execution vulnerabilities (this is the same feature behind CVE-2018-0171). None of these have a reason to be on in a modern network, and most administrators don't know they're on until something checks for them explicitly.</p>
+
+    <h2>8. Missing or weak Control Plane Policing (CoPP)</h2>
+    <p>CoPP protects the device's own management and control plane from being overwhelmed by traffic arriving on the data plane — without it, a flood of traffic (malicious or just a misbehaving host) can starve the CPU resources the device needs to keep routing protocols up and remain manageable. It's an advanced, easy-to-forget control precisely because its absence doesn't cause a problem until the day something needs it.</p>
+
+    <h2>9. VTY lines without an access-class restriction</h2>
+    <p>AAA and strong authentication on VTY lines gets checked. Whether the VTY lines are additionally restricted, via <code>access-class</code>, to only accept connections from a defined management subnet gets checked less. Authentication answers "can you log in." An access-class ACL answers "can you even attempt to" — a second layer that matters a great deal when the first one has a bad day (a leaked credential, a brute-force attempt, a bug in the auth flow itself).</p>
+
+    <h2>10. SNMPv1/v2c left enabled alongside SNMPv3</h2>
+    <p>Migrating to SNMPv3 is a common hardening project, and audits typically confirm "SNMPv3 is configured" and stop there. Whether the older, unauthenticated v1/v2c community-string access got explicitly turned <em>off</em> afterward is a separate question, and the answer is often no — the new, secure configuration was added, but the old, insecure one was never removed. An attacker doesn't care which version you intended to use; they'll use whichever one still answers.</p>
+
+    <div class="card">
+      <p><strong>The pattern across all ten:</strong> almost none of these are things anyone deliberately chose to leave insecure. They're leftovers — inherited defaults, half-finished migrations, features nobody remembered were still on. That's exactly the category a rule-based scan is good at catching, because it doesn't get tired of checking the boring things.</p>
+    </div>
+
+    <div class="cta-box">
+      <h3>Check for all ten automatically</h3>
+      <p>ConfGoOne's Cisco IOS/IOS XE rule pack covers these checks and 290+ more — every scan, every device, no manual checklist required.</p>
+      <a class="btn" href="../index.html#pricing">Try ConfGoOne →</a>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to all posts</a>
+  </article>
+</div>
+
+<footer>
+  <div>
+    <a href="../index.html">Home</a>
+    <a href="index.html">Blog</a>
+    <a href="../privacy.html">Privacy</a>
+    <a href="../terms.html">Terms</a>
+    <a href="mailto:confgoone@gmail.com">Support</a>
+  </div>
+  <div class="copy">© <span id="year"></span> ConfGoOne. All rights reserved.</div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

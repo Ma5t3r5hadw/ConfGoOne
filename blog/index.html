@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — ConfGoOne</title>
+<meta name="description" content="Notes on configuration security, compliance frameworks, and attack paths — from the team building ConfGoOne.">
+<link rel="canonical" href="https://confgoone.com/blog/index.html">
+<link rel="icon" href="../assets/logo.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ConfGoOne">
+<meta property="og:title" content="ConfGoOne Blog">
+<meta property="og:description" content="Notes on configuration security, compliance frameworks, and attack paths.">
+<meta property="og:image" content="https://confgoone.com/assets/logo.png">
+<meta property="og:url" content="https://confgoone.com/blog/index.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ConfGoOne Blog">
+<meta name="twitter:description" content="Notes on configuration security, compliance frameworks, and attack paths.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+<a class="nav" href="../index.html" style="text-decoration:none">
+  <img src="../assets/logo.png" alt="">
+  <span>ConfGoOne</span>
+</a>
+
+<div class="wrap wide">
+  <div class="blog-hero">
+    <span class="eyebrow">● Blog</span>
+    <h1>Configuration security, in plain language</h1>
+    <p>Notes on the frameworks, attack paths, and real CVEs behind network and system config audits — from the team building ConfGoOne.</p>
+  </div>
+
+  <div class="post-grid">
+
+    <a class="post-card" href="network-hardening-checks-most-audits-skip.html">
+      <div class="meta"><span>Sep 17, 2026</span><span>·</span><span class="tag">Hardening</span></div>
+      <h2>10 network device hardening checks most audits skip</h2>
+      <p>The obvious stuff — password complexity, NTP, banners — gets checked every time. These ten don't, and they're where real compromises start.</p>
+      <span class="read">Read post →</span>
+    </a>
+
+    <a class="post-card" href="cisco-iosxe-webui-backdoor-cve-2023-20198.html">
+      <div class="meta"><span>Sep 10, 2026</span><span>·</span><span class="tag">CVE Analysis</span></div>
+      <h2>The Cisco IOS XE Web UI backdoor: what CVE-2023-20198 actually teaches us</h2>
+      <p>One misconfigured feature, one unauthenticated privilege-escalation bug, and tens of thousands of routers with a planted admin account. Here's what a config audit would have — and wouldn't have — caught.</p>
+      <span class="read">Read post →</span>
+    </a>
+
+    <a class="post-card" href="config-drift-why-it-matters.html">
+      <div class="meta"><span>Sep 3, 2026</span><span>·</span><span class="tag">Drift Detection</span></div>
+      <h2>Why configuration drift is the blind spot in most security audits</h2>
+      <p>A device can pass its audit on Monday and be wide open by Friday, with nobody touching the audit report in between. Point-in-time scans can't see that. Here's what can.</p>
+      <span class="read">Read post →</span>
+    </a>
+
+    <a class="post-card" href="attack-path-analysis-explained.html">
+      <div class="meta"><span>Aug 27, 2026</span><span>·</span><span class="tag">Attack Paths</span></div>
+      <h2>What is attack path analysis (and why a findings list isn't enough)</h2>
+      <p>A list of 40 findings sorted by severity tells you what's wrong. It doesn't tell you which three of them, chained together, get an attacker to domain admin. That's a different question.</p>
+      <span class="read">Read post →</span>
+    </a>
+
+    <a class="post-card" href="cis-nist-pci-dss-compared.html">
+      <div class="meta"><span>Aug 20, 2026</span><span>·</span><span class="tag">Frameworks</span></div>
+      <h2>CIS Controls vs. NIST 800-53 vs. PCI-DSS: how they actually differ</h2>
+      <p>Three frameworks, three different jobs. If you've ever had to explain to an auditor why "we're NIST-aligned" doesn't mean "we're PCI-compliant," this is for you.</p>
+      <span class="read">Read post →</span>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <div>
+    <a href="../index.html">Home</a>
+    <a href="../index.html#pricing">Pricing</a>
+    <a href="../privacy.html">Privacy</a>
+    <a href="../terms.html">Terms</a>
+    <a href="mailto:confgoone@gmail.com">Support</a>
+  </div>
+  <div class="copy">© <span id="year"></span> ConfGoOne. All rights reserved.</div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
