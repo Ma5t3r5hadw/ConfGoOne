@@ -205,7 +205,7 @@ One license, activated on one machine. See the **[pricing page](https://confgoon
 
 Found a bug, or something not working as expected? Open an **[issue](https://github.com/Ma5t3r5hadw/ConfGoOne/issues)** here.
 
-For licensing or billing questions, use the contact link on the **[website](https://confgoone.com/)**, or email **confgoone@gmail.com**.
+For licensing or billing questions, use the contact link on the **[website](https://confgoone.com/)**, or email **support@confgoone.com**.
 
 <br>
 
