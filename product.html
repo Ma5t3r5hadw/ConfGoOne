@@ -6,7 +6,7 @@
 <title>ConfGoOne Product Tour — Findings, Dashboard, Reports, Frameworks</title>
 <meta name="description" content="See ConfGoOne in action: findings with the exact config line and fix commands, a posture dashboard, filterable HTML/PDF/Word reports with attack paths, and CIS / DISA STIG / NIST / ISO 27001 framework views.">
 <link rel="canonical" href="https://confgoone.com/product.html">
-<link rel="icon" href="assets/logo.png">
+<link rel="icon" href="assets/logo-64.png">
 <meta name="theme-color" content="#020306">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ConfGoOne">
@@ -92,6 +92,14 @@ img{max-width:100%;display:block}
 .wrap{position:relative;z-index:1;max-width:1220px;margin:0 auto;padding:0 48px}
 @media (max-width:600px){ .wrap{padding:0 22px} .nav{padding:18px 22px} }
 
+.btn{font-family:var(--font-body);font-weight:700;font-size:14px;border-radius:100px;padding:14px 28px;
+  cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:9px;
+  transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-3px)}
+.btn-primary{color:#020617;background:linear-gradient(135deg,var(--signal-bright),var(--signal));box-shadow:0 10px 34px var(--signal-glow)}
+.btn-primary:hover{box-shadow:0 14px 44px var(--signal-glow)}
+.btn-ghost{color:var(--chrome-hi);background:rgba(255,255,255,.04);border-color:var(--border);backdrop-filter:blur(8px)}
+.btn-ghost:hover{border-color:var(--border-hi)}
 /* ── Section shell ── */
 section{position:relative;padding:110px 0;border-top:1px solid var(--border)}
 .section-head{max-width:640px;margin-bottom:56px}
@@ -161,7 +169,7 @@ footer .copyright{font-family:var(--font-mono);font-size:12px;color:var(--chrome
 </div>
 
 <nav class="nav">
-  <a class="brand" href="index.html"><img src="assets/logo.png" alt=""><span>ConfGoOne</span></a>
+  <a class="brand" href="index.html"><img src="assets/logo-64.png" alt=""><span>ConfGoOne</span></a>
   <a class="link" href="index.html#features">Features</a>
   <a class="link" href="product.html">Product tour</a>
   <a class="link" href="index.html#pricing">Pricing</a>
@@ -279,7 +287,7 @@ footer .copyright{font-family:var(--font-mono);font-size:12px;color:var(--chrome
 <footer>
   <div class="wrap foot-grid">
     <div>
-      <div class="foot-brand"><img src="assets/logo.png" alt=""><span>ConfGoOne</span></div>
+      <div class="foot-brand"><img src="assets/logo-64.png" alt=""><span>ConfGoOne</span></div>
       <div class="copyright">© <span id="year"></span> ConfGoOne. All rights reserved.</div>
     </div>
     <div class="links">
@@ -292,6 +300,7 @@ footer .copyright{font-family:var(--font-mono);font-size:12px;color:var(--chrome
       <a href="mailto:support@confgoone.com">Support</a>
     </div>
   </div>
+  <div class="wrap foot-solutions"><a href="cisco-config-audit.html">Cisco audit</a><a href="firewall-config-audit.html">Firewall audit</a><a href="stig-checklist.html">STIG checklists</a><a href="cis-benchmark-audit.html">CIS audit</a><a href="cloud-config-audit.html">Cloud audit</a><a href="server-hardening-audit.html">Server hardening</a></div>
 </footer>
 
 <script>

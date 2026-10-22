@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to audit a Cisco router configuration: a step-by-step checklist — ConfGoOne Blog</title>
+<meta name="description" content="A practical checklist for auditing a Cisco IOS / IOS XE configuration: management access, authentication, SNMP, logging, NTP and unused services — with the commands to check and fix each one.">
+<link rel="canonical" href="https://confgoone.com/blog/how-to-audit-cisco-router-configuration.html">
+<link rel="icon" href="../assets/logo-64.png">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ConfGoOne">
+<meta property="og:title" content="How to audit a Cisco router configuration: a step-by-step checklist">
+<meta property="og:description" content="A practical checklist for auditing a Cisco IOS / IOS XE configuration: management access, authentication, SNMP, logging, NTP and unused services — with the commands to check and fix each one.">
+<meta property="og:image" content="https://confgoone.com/assets/og-image.jpg">
+<meta property="og:url" content="https://confgoone.com/blog/how-to-audit-cisco-router-configuration.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to audit a Cisco router configuration: a step-by-step checklist">
+<meta name="twitter:description" content="A practical checklist for auditing a Cisco IOS / IOS XE configuration: management access, authentication, SNMP, logging, NTP and unused services — with the commands to check and fix each one.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to audit a Cisco router configuration: a step-by-step checklist",
+  "description": "A practical checklist for auditing a Cisco IOS / IOS XE configuration: management access, authentication, SNMP, logging, NTP and unused services — with the commands to check and fix each one.",
+  "datePublished": "2026-10-22",
+  "image": "https://confgoone.com/assets/og-image.jpg",
+  "author": {
+    "@type": "Organization",
+    "name": "ConfGoOne"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "ConfGoOne",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://confgoone.com/assets/logo.png"
+    }
+  },
+  "mainEntityOfPage": "https://confgoone.com/blog/how-to-audit-cisco-router-configuration.html"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+<div class="nav">
+  <img src="../assets/logo-64.png" alt="">
+  <span>ConfGoOne</span>
+  <a class="back" href="index.html">← Blog</a>
+</div>
+
+<div class="wrap">
+  <article>
+    <div class="article-meta"><span>Oct 22, 2026</span><span class="dot">·</span><span>How-to</span><span class="dot">·</span><span>8 min read</span></div>
+    <h1>How to audit a Cisco router configuration: a step-by-step checklist</h1>
+    <p class="lede">Auditing a Cisco router doesn't start with a scanner. It starts with one text file — the running configuration — and a clear list of what to look for. Here is the checklist we use, in the order that finds the most serious problems first.</p>
+
+    <h2>Step 0: get the right file</h2>
+    <p>Everything below works from the device's configuration, so start by exporting it. On the router run <code>show running-config</code> (or <code>show running-config all</code> if you also want default values) and save the output to a text file. Grab <code>show version</code> too — the software version decides which known vulnerabilities (CVEs) apply.</p>
+    <p>Work from a copy. Never paste a live config with real passwords into an online tool; secrets like <code>enable secret</code> hashes and SNMP communities are in that file.</p>
+
+    <h2>Step 1: management access — who can log in, and how</h2>
+    <p>This is where most real compromises begin, so check it first.</p>
+    <ul>
+      <li><b>No Telnet.</b> Every <code>line vty</code> block should say <code>transport input ssh</code>. <code>transport input telnet</code> or <code>transport input all</code> sends credentials in clear text.</li>
+      <li><b>SSH version 2 only.</b> Look for <code>ip ssh version 2</code>. Version 1 has known weaknesses.</li>
+      <li><b>Restrict where logins come from.</b> VTY lines should have an <code>access-class</code> that only allows the management network.</li>
+      <li><b>Idle timeout.</b> <code>exec-timeout</code> on VTY <em>and</em> console/AUX lines — 10 minutes or less is typical.</li>
+      <li><b>No web management in clear text.</b> <code>no ip http server</code>; if the web UI is needed at all, use <code>ip http secure-server</code> with an access list.</li>
+    </ul>
+
+    <h2>Step 2: authentication and passwords</h2>
+    <ul>
+      <li><b><code>enable secret</code>, never <code>enable password</code>.</b> The old <code>enable password</code> is stored reversibly. Prefer a strong hash (<code>algorithm-type scrypt</code> on current IOS).</li>
+      <li><b>Central AAA.</b> <code>aaa new-model</code> with TACACS+ or RADIUS for login and exec authorization, so every admin has their own account and actions are traceable.</li>
+      <li><b>Local fallback account</b> with a hashed secret, for when the AAA server is unreachable.</li>
+      <li><b><code>service password-encryption</code></b> — worth enabling, but know that it only hides type 7 passwords from shoulder-surfing; type 7 is trivially reversible.</li>
+      <li><b>Login brute-force protection.</b> <code>login block-for</code> slows down password guessing.</li>
+    </ul>
+
+    <h2>Step 3: SNMP</h2>
+    <ul>
+      <li>No <code>public</code> or <code>private</code> community strings — ever.</li>
+      <li>Any remaining community must have an access list limiting which hosts can use it.</li>
+      <li>Prefer SNMPv3 with authentication and privacy, and remove v1/v2c once v3 works.</li>
+      <li>Read-write (<code>RW</code>) communities are rarely needed; each one is a remote configuration change waiting to happen.</li>
+    </ul>
+
+    <h2>Step 4: logging and time</h2>
+    <ul>
+      <li><b>Remote syslog</b> with <code>logging host</code>. A local buffer alone is lost on reboot and easy to overwrite.</li>
+      <li><b>Timestamps</b> with <code>service timestamps log datetime msec</code> so events can be correlated.</li>
+      <li><b>Authenticated NTP.</b> Correct time matters for logs and certificates; <code>ntp authenticate</code> with a trusted key stops time spoofing.</li>
+    </ul>
+
+    <h2>Step 5: services nobody remembers enabling</h2>
+    <p>Older defaults and copied configs leave features on that no one uses: CDP on internet-facing interfaces, IP source routing, directed broadcast, the small TCP/UDP servers, BOOTP, and Smart Install (<code>vstack</code>), which has a long history of abuse. Turn off anything without a clear purpose.</p>
+
+    <h2>Step 6: match the version against known vulnerabilities</h2>
+    <p>Take the version from <code>show version</code> and check Cisco's security advisories and the NVD for CVEs affecting it — especially anything on CISA's Known Exploited Vulnerabilities list. A perfectly hardened config on a version with an actively exploited flaw is still exposed.</p>
+
+    <h2>Step 7: map findings to the standard you report against</h2>
+    <p>Most audits have to answer to something: CIS Benchmarks, DISA STIG, NIST 800-53, ISO 27001 or PCI-DSS. Record which control each finding breaks, the exact line as evidence, and the change that fixes it. That turns a list of problems into a report someone can act on.</p>
+
+    <div class="card">
+      <p><strong>Doing this by hand</strong> takes an experienced engineer an hour or more per device, and it's easy to miss a line in a 2,000-line config. It's also exactly the kind of work a tool should do — so you can spend the time on the findings that need judgement.</p>
+    </div>
+
+    <div class="cta-box">
+      <h3>Run this whole checklist in seconds</h3>
+      <p>ConfGoOne checks a Cisco config against all of the above — with the exact line, the fix commands and the mapped standard for every finding.</p>
+      <a class="btn" href="../cisco-config-audit.html">See the Cisco audit →</a>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to all posts</a>
+  </article>
+</div>
+
+<footer>
+  <div>
+    <a href="../index.html">Home</a>
+    <a href="index.html">Blog</a>
+    <a href="../privacy.html">Privacy</a>
+    <a href="../terms.html">Terms</a>
+    <a href="mailto:support@confgoone.com">Support</a>
+  </div>
+  <div class="copy">© <span id="year"></span> ConfGoOne. All rights reserved.</div>
+  <div class="foot-solutions" style="justify-content:center"><a href="../cisco-config-audit.html">Cisco audit</a><a href="../firewall-config-audit.html">Firewall audit</a><a href="../stig-checklist.html">STIG checklists</a><a href="../cis-benchmark-audit.html">CIS audit</a><a href="../cloud-config-audit.html">Cloud audit</a><a href="../server-hardening-audit.html">Server hardening</a></div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "27a5a1364bee4af38f54b2062a2fa904"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -29,6 +29,7 @@ Give ConfGoOne a configuration — from a file, a live device, or a pasted scrip
 ## 📋 Contents
 
 - [What it does](#-what-it-does)
+- [Screenshots](#-screenshots)
 - [Everything included](#-everything-included)
 - [How it works](#-how-it-works)
 - [Download](#-download)
@@ -53,6 +54,24 @@ Give ConfGoOne a configuration — from a file, a live device, or a pasted scrip
 | 🧭 **Personal guide** | Learns how you work, greets you by name and suggests the next step on every page. |
 | 🎯 **Audit to one standard** | Choose only CIS, only STIG or only ISO 27001 — findings, scores and the report all follow your choice. |
 | 📋 **STIG checklists** | Export straight to STIG Viewer 2 (.ckl) and STIG Viewer 3 (.cklb), every item filled in. |
+
+<br>
+
+## 📸 Screenshots
+
+Real screens from one audit of a Cisco router configuration.
+
+<p align="center"><img src="assets/shots/findings.jpg" width="100%" alt="Findings: the insecure line highlighted, with the commands to fix it"><br><sub><b>Findings</b> — the exact line in your config, why it matters, and the fix commands</sub></p>
+
+<table><tr>
+<td width="50%"><img src="assets/shots/dashboard.jpg" alt="Dashboard"><br><sub><b>Dashboard</b> — posture score and failures by severity</sub></td>
+<td width="50%"><img src="assets/shots/attack-path.jpg" alt="Attack Path"><br><sub><b>Attack Path</b> — how findings chain into a breach, ranked</sub></td>
+</tr><tr>
+<td width="50%"><img src="assets/shots/report.jpg" alt="Report"><br><sub><b>Report</b> — filter by framework and severity; HTML, PDF, Word, STIG .ckl/.cklb</sub></td>
+<td width="50%"><img src="assets/shots/frameworks.jpg" alt="Frameworks"><br><sub><b>Frameworks</b> — CIS, DISA STIG, NIST 800-53, ISO 27001 and more</sub></td>
+</tr></table>
+
+More on the website: [Product tour](https://confgoone.com/product.html) · [Cisco audit](https://confgoone.com/cisco-config-audit.html) · [Firewall audit](https://confgoone.com/firewall-config-audit.html) · [STIG checklists](https://confgoone.com/stig-checklist.html) · [CIS audit](https://confgoone.com/cis-benchmark-audit.html)
 
 <br>
 
