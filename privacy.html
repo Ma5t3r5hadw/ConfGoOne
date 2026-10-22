@@ -57,11 +57,14 @@ footer .copy{font-family:var(--font-mono);font-size:11.5px;color:var(--chrome-di
   </div>
 
   <h2>What we collect, and why</h2>
-  <p>Only three situations send any data outside your machine:</p>
+  <p>Your configuration files never leave your machine. These are the only situations in which the app or this website sends anything:</p>
   <ul>
     <li><b>Downloading the app.</b> The download form asks for your name and email. We use them to send a welcome email and occasional product-update emails — for example when a new version is released. Every update email has a one-click <b>unsubscribe</b> link, and unsubscribing takes effect immediately. We never sell or share your address.</li>
     <li><b>Buying a license.</b> When you purchase Pro or Enterprise, our payment processor (Razorpay) and email provider (Resend) receive your email address, your Machine ID (a short code derived from your computer's hardware, not personally identifying on its own), and payment details handled entirely by Razorpay — we never see or store your card details. This is used solely to generate and deliver your license key, and is kept as our sales record.</li>
     <li><b>Using the optional AI feature.</b> If you turn on AI-assisted analysis and configure your own API key for a provider (OpenAI, Anthropic, Gemini, OpenRouter, NVIDIA NIM, or a self-hosted endpoint), the relevant configuration content is sent directly from your machine to that provider, under whatever privacy terms they publish. This is entirely optional, off by default, and never proxied through us — we don't see this data either. Using a local model through Ollama sends nothing anywhere.</li>
+    <li><b>Known-vulnerability lookups.</b> To list known CVEs for a device, the app sends the product name and software version (for example "Cisco IOS 15.2") to the US National Vulnerability Database (NVD), downloads CISA's public list of actively exploited vulnerabilities, and sends CVE numbers to FIRST.org for exploit-likelihood (EPSS) scores. No configuration content, file names or personal data are sent, and none of it goes through us. You can turn this off in <b>Settings → General → Network</b> to keep audits fully offline.</li>
+    <li><b>Visiting this website.</b> We use Cloudflare Web Analytics to count page views and see which pages are popular. It uses no cookies, does not track you across sites, and does not identify individual visitors.</li>
+    <li><b>Update checks.</b> The app checks confgoone.com for a newer version, and paid licences check our server for new compliance checks (sending the licence key so we can confirm the licence is valid). Nothing about your audits is sent.</li>
   </ul>
 
   <h2>What we never see</h2>
@@ -80,6 +83,8 @@ footer .copy{font-family:var(--font-mono);font-size:11.5px;color:var(--chrome-di
     <li><b>Razorpay</b> — payment processing. See <a href="https://razorpay.com/privacy/" target="_blank" rel="noopener">Razorpay's privacy policy</a>.</li>
     <li><b>Resend</b> — delivers the email containing your license key. See <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener">Resend's privacy policy</a>.</li>
     <li><b>GitHub</b> — hosts the app download. No account or login is required.</li>
+    <li><b>Cloudflare</b> — privacy-friendly website visit counts (no cookies). See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare's privacy policy</a>.</li>
+    <li><b>NIST NVD, CISA and FIRST.org</b> — public vulnerability databases queried for known-CVE lookups (product name, version and CVE numbers only). Optional; can be turned off in the app.</li>
   </ul>
 
   <h2>Your rights</h2>
@@ -102,5 +107,6 @@ footer .copy{font-family:var(--font-mono);font-size:11.5px;color:var(--chrome-di
   <div class="copy">© <span id="year"></span> ConfGoOne. All rights reserved.</div>
 </footer>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "27a5a1364bee4af38f54b2062a2fa904"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

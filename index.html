@@ -63,7 +63,7 @@
     {
       "@type": "FAQPage",
       "mainEntity": [
-        { "@type": "Question", "name": "Does ConfGoOne upload my configuration files?", "acceptedAnswer": { "@type": "Answer", "text": "No. Every check runs on your own PC. If you turn on the optional AI review, it only receives a redacted copy with passwords and keys removed first." } },
+        { "@type": "Question", "name": "Does ConfGoOne upload my configuration files?", "acceptedAnswer": { "@type": "Answer", "text": "No. Every check runs on your own PC. If you turn on the optional AI review, it only receives a redacted copy with passwords and keys removed first. To list known CVEs, the app looks up only the product name and version (for example Cisco IOS 15.2) in public vulnerability databases — and you can switch that off to stay fully offline." } },
         { "@type": "Question", "name": "Which devices and systems can it audit?", "acceptedAnswer": { "@type": "Answer", "text": "Network devices such as Cisco IOS, IOS XE, NX-OS and ASA, Juniper, Fortinet FortiGate, Palo Alto, Check Point, SonicWall, MikroTik, Aruba, F5 BIG-IP and Huawei; Linux and Windows servers; Apache, Nginx and IIS; MySQL, PostgreSQL and SQL Server; AWS, Azure, Google Cloud, Kubernetes, Docker and Terraform; and ICS / OT systems." } },
         { "@type": "Question", "name": "Which compliance frameworks are covered?", "acceptedAnswer": { "@type": "Answer", "text": "Findings are mapped to CIS Benchmarks, DISA STIG, NIST SP 800-53, ISO/IEC 27001:2022, PCI-DSS, HIPAA, CMMC, NIST CSF and more. You can audit against one framework only, for example CIS, and the report covers just that framework." } },
         { "@type": "Question", "name": "Can it produce DISA STIG checklists?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. ConfGoOne exports .ckl files for STIG Viewer 2 and .cklb files for STIG Viewer 3, with each STIG item filled in from the audit." } },
@@ -920,7 +920,7 @@ footer .copyright{font-family:var(--font-mono);font-size:12px;color:var(--chrome
       <h2>Questions people ask</h2>
     </div>
     <div class="faq-list reveal">
-      <details><summary>Does ConfGoOne upload my configuration files?</summary><p>No. Every check runs on your own PC. If you turn on the optional AI review, it only receives a redacted copy with passwords and keys removed first.</p></details>
+      <details><summary>Does ConfGoOne upload my configuration files?</summary><p>No. Every check runs on your own PC. If you turn on the optional AI review, it only receives a redacted copy with passwords and keys removed first. To list known CVEs, the app looks up only the product name and version (for example Cisco IOS 15.2) in public vulnerability databases — and you can switch that off to stay fully offline.</p></details>
       <details><summary>Which devices and systems can it audit?</summary><p>Network devices such as Cisco IOS, IOS XE, NX-OS and ASA, Juniper, Fortinet FortiGate, Palo Alto, Check Point, SonicWall, MikroTik, Aruba, F5 BIG-IP and Huawei; Linux and Windows servers; Apache, Nginx and IIS; MySQL, PostgreSQL and SQL Server; AWS, Azure, Google Cloud, Kubernetes, Docker and Terraform; and ICS / OT systems.</p></details>
       <details><summary>Which compliance frameworks are covered?</summary><p>Findings are mapped to CIS Benchmarks, DISA STIG, NIST SP 800-53, ISO/IEC 27001:2022, PCI-DSS, HIPAA, CMMC, NIST CSF and more. You can audit against one framework only — for example CIS — and the report covers just that framework.</p></details>
       <details><summary>Can it produce DISA STIG checklists?</summary><p>Yes. ConfGoOne exports .ckl files for STIG Viewer 2 and .cklb files for STIG Viewer 3, with each STIG item filled in from the audit.</p></details>
@@ -1522,5 +1522,6 @@ window._howActiveStep = 0;
   })();
 })();
 </script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "27a5a1364bee4af38f54b2062a2fa904"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
