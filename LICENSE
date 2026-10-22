@@ -1,0 +1,48 @@
+ConfGoOne — Proprietary License
+Copyright (c) 2026 ConfGoOne. All rights reserved.
+
+This repository and everything in it — the website source code, text,
+design, graphics, logos, screenshots and the ConfGoOne application
+binaries published under Releases — are the exclusive property of
+ConfGoOne and are protected by copyright and trademark law.
+
+NO OPEN-SOURCE LICENSE IS GRANTED. The fact that this repository is
+publicly visible does not give you any right to use its contents
+beyond what is stated below.
+
+1. Website content and source code
+   You may view this repository and the website at https://confgoone.com.
+   You may NOT copy, reproduce, modify, distribute, publish, mirror,
+   sublicense or create derivative works from any part of it, in whole
+   or in part, without prior written permission from ConfGoOne.
+
+2. The ConfGoOne application
+   The application is licensed, not sold. Downloading, installing or
+   using it is governed by the ConfGoOne Terms of Service
+   (https://confgoone.com/terms.html). In particular, you may NOT:
+     - reverse engineer, decompile, disassemble, deobfuscate or
+       otherwise attempt to derive its source code, rules or data;
+     - bypass, disable or tamper with licence checks, usage limits
+       or security protections;
+     - share, resell, rent or publish licence keys;
+     - redistribute the application or any part of it, including its
+       rule packs and compliance mappings.
+
+3. Trademarks
+   "ConfGoOne" and the ConfGoOne logo are trademarks of ConfGoOne.
+   They may not be used without written permission.
+
+4. Third-party names
+   Product and standard names (for example CIS, DISA STIG, NIST,
+   ISO/IEC 27001, Cisco) belong to their respective owners and are used
+   only to describe compatibility.
+
+5. No warranty
+   Everything here is provided "as is", without warranty of any kind.
+   To the maximum extent permitted by law, ConfGoOne is not liable for
+   any damages arising from its use.
+
+Any use not expressly permitted above is prohibited and may result in
+legal action.
+
+Permission requests: support@confgoone.com

@@ -7,7 +7,7 @@
 [![Latest Release](https://img.shields.io/github/v/release/Ma5t3r5hadw/ConfGoOne?label=latest&color=2f8ef4&style=for-the-badge)](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/Ma5t3r5hadw/ConfGoOne/total?color=6fc3ff&style=for-the-badge)](https://github.com/Ma5t3r5hadw/ConfGoOne/releases)
 [![Platform](https://img.shields.io/badge/platform-Windows-2f8ef4?style=for-the-badge)](#-download)
-[![License](https://img.shields.io/badge/license-Commercial-8b7bff?style=for-the-badge)](#-licensing--pricing)
+[![License](https://img.shields.io/badge/license-Proprietary-8b7bff?style=for-the-badge)](LICENSE)
 
 <a href="https://confgoone.com/"><b>Website</b></a> ·
 <a href="#-download"><b>Download</b></a> ·
@@ -19,6 +19,8 @@
 <br>
 
 Give ConfGoOne a configuration — from a file, a live device, or a pasted script's output — and it reviews it **immediately**: what's wrong, why it matters, and exactly how to fix it. No "start scan" button, no setup step. It checks itself against every compliance standard you care about, traces how small issues chain into a real breach, and hands you a report worth sending — in whatever format the person on the other end actually wants.
+
+> **Attackers read your configs line by line. Now you can read them first.**
 
 > This repository holds **releases and the project website only** — how you get the app and see what's new. The application itself is closed source.
 
@@ -32,6 +34,7 @@ Give ConfGoOne a configuration — from a file, a live device, or a pasted scrip
 - [Download](#-download)
 - [Licensing & pricing](#-licensing--pricing)
 - [Privacy & security](#-privacy--security)
+- [License](#-license)
 - [Support](#-support)
 
 <br>
@@ -46,7 +49,10 @@ Give ConfGoOne a configuration — from a file, a live device, or a pasted scrip
 | ⚡ **Attack Path** | How small issues chain into a real breach, ranked by how dangerous each route actually is. |
 | 📊 **Report** | A polished document in one click, in whatever format the reader actually wants. |
 | 💬 **AI Assistant** | Ask questions about your own configuration in plain English — every answer is checked before you see it. |
-| 📸 **Live Screen Capture** | No config export, no CLI access — point it at a live screen and it reads and reviews what's on it. |
+| 📸 **Live Screen Capture** | No config export, no CLI access — point it at a live screen and it reads and reviews what's on it. Screenshots are saved to a project folder automatically. |
+| 🧭 **Personal guide** | Learns how you work, greets you by name and suggests the next step on every page. |
+| 🎯 **Audit to one standard** | Choose only CIS, only STIG or only ISO 27001 — findings, scores and the report all follow your choice. |
+| 📋 **STIG checklists** | Export straight to STIG Viewer 2 (.ckl) and STIG Viewer 3 (.cklb), every item filled in. |
 
 <br>
 
@@ -107,6 +113,8 @@ One license unlocks all of it — no add-on packs, no feature paywall inside the
 <br>
 
 - One-click export to HTML, PDF, Word, or Excel
+- The HTML report filters by framework and severity, and includes the attack path diagrams
+- DISA STIG checklists for STIG Viewer (.ckl and .cklb)
 - A shareable report built for whoever's actually going to read it — an engineer or an executive
 - CI/CD REST API to run reviews as part of your own pipeline
 
@@ -170,7 +178,7 @@ There's no "start scan" button to remember — the review begins the instant you
 
 **[Download ConfGoOne.exe](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest/download/ConfGoOne.exe)** — always the latest version. No install, no admin rights — just run it.
 
-Windows only for now, macOS in progress. It's a portable app, so check back here for new versions — there's no in-app update check yet.
+Windows only for now, macOS in progress. When a new version is out, the app tells you — your history and settings carry over when you upgrade.
 
 <br>
 
@@ -198,6 +206,14 @@ One license, activated on one machine. See the **[pricing page](https://confgoon
 - The only exception is whatever you explicitly send to your own AI provider, if you choose to turn that feature on
 - No install-time telemetry
 - License keys are bound to your machine, verified cryptographically, and never phone home
+- Refuses traffic-interception proxies and debuggers, so nobody can watch what the app sends
+- New compliance checks arrive cryptographically signed, and are verified before they're used
+
+<br>
+
+## 📜 License
+
+ConfGoOne is **proprietary software — not open source.** This repository is public so you can download releases and see what's new; it does not grant any right to copy, modify or redistribute its contents. Use of the app is covered by the [Terms of Service](https://confgoone.com/terms.html). See **[LICENSE](LICENSE)** for the full terms.
 
 <br>
 
