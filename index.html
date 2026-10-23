@@ -1327,7 +1327,7 @@ window._howActiveStep = 0;
     var name = document.getElementById('dlName').value.trim();
     var email = document.getElementById('dlEmail').value.trim();
     if (!name || !email) return;
-    fetch('https://confgoone-api.confgoone-api.workers.dev/api/download-signup', {
+    fetch('https://api.confgoone.com/api/download-signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: name, email: email }),
