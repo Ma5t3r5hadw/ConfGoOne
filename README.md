@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="https://www.confgoone.com/"><img src="https://www.confgoone.com/assets/readme/hero.svg" width="100%" alt="ConfGoOne — read your configurations before attackers do. Every issue explained, proven and ready to fix, on your own PC."></a>
+<a href="https://www.confgoone.com/"><img src="https://www.confgoone.com/assets/readme/hero.svg?v=2" width="100%" alt="ConfGoOne — read your configurations before attackers do. Every issue explained, proven and ready to fix, on your own PC."></a>
 
 <a href="https://www.confgoone.com/">
   <img src="https://readme-typing-svg.demolab.com?font=Plus+Jakarta+Sans&weight=700&size=24&duration=2800&pause=900&color=60A5FA&center=true&vCenter=true&width=760&height=48&lines=Open+a+configuration.+See+what's+wrong+in+seconds.;Every+finding+explained+%E2%80%94+with+the+fix.;Prove+which+scanner+findings+are+real.;Reports+your+auditors+and+managers+will+read.;Runs+on+your+PC.+Your+configs+stay+there." alt="Open a configuration. See what's wrong in seconds. Every finding explained — with the fix. Prove which scanner findings are real.">
@@ -194,6 +194,8 @@ Questions, licensing or help with a release — **[support@confgoone.com](mailto
 <br>
 
 <div align="center">
+
+<a href="https://www.confgoone.com/"><img src="https://www.confgoone.com/assets/logo.png" width="72" alt="ConfGoOne logo"></a>
 
 <sub>ConfGoOne is proprietary software. This repository publishes the app's releases only — see <a href="LICENSE">LICENSE</a>.</sub>
 
