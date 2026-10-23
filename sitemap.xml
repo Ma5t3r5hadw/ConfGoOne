@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://confgoone.com/</loc>
+    <loc>https://www.confgoone.com/</loc>
     <lastmod>2026-10-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://confgoone.com/privacy.html</loc>
+    <loc>https://www.confgoone.com/privacy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://confgoone.com/terms.html</loc>
+    <loc>https://www.confgoone.com/terms</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://confgoone.com/refund.html</loc>
+    <loc>https://www.confgoone.com/refund</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://confgoone.com/blog/index.html</loc>
+    <loc>https://www.confgoone.com/blog/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://confgoone.com/blog/cis-nist-pci-dss-compared.html</loc>
+    <loc>https://www.confgoone.com/blog/cis-nist-pci-dss-compared</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://confgoone.com/blog/attack-path-analysis-explained.html</loc>
+    <loc>https://www.confgoone.com/blog/attack-path-analysis-explained</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://confgoone.com/blog/config-drift-why-it-matters.html</loc>
+    <loc>https://www.confgoone.com/blog/config-drift-why-it-matters</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://confgoone.com/blog/cisco-iosxe-webui-backdoor-cve-2023-20198.html</loc>
+    <loc>https://www.confgoone.com/blog/cisco-iosxe-webui-backdoor-cve-2023-20198</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://confgoone.com/blog/network-hardening-checks-most-audits-skip.html</loc>
+    <loc>https://www.confgoone.com/blog/network-hardening-checks-most-audits-skip</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  <url><loc>https://confgoone.com/product.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://confgoone.com/cisco-config-audit.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://confgoone.com/firewall-config-audit.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://confgoone.com/stig-checklist.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://confgoone.com/cis-benchmark-audit.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://confgoone.com/cloud-config-audit.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://confgoone.com/server-hardening-audit.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://confgoone.com/blog/how-to-audit-cisco-router-configuration.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://confgoone.com/blog/firewall-misconfigurations-auditors-find.html</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.confgoone.com/product</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.confgoone.com/cisco-config-audit</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.confgoone.com/firewall-config-audit</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.confgoone.com/stig-checklist</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.confgoone.com/cis-benchmark-audit</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.confgoone.com/cloud-config-audit</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.confgoone.com/server-hardening-audit</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.confgoone.com/blog/how-to-audit-cisco-router-configuration</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.confgoone.com/blog/firewall-misconfigurations-auditors-find</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

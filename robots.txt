@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://confgoone.com/sitemap.xml
+Sitemap: https://www.confgoone.com/sitemap.xml
