@@ -1,253 +1,138 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d121e,50:2f8ef4,100:8b7bff&height=220&section=header&text=ConfGoOne&fontSize=64&fontColor=f6f9fd&animation=fadeIn&fontAlignY=38&desc=Security%20configuration%20auditing%20that%20reviews%20itself%20the%20moment%20you%20open%20a%20file&descAlignY=58&descSize=18" width="100%" alt="ConfGoOne">
+<img src="assets/logo.png" width="96" alt="ConfGoOne logo">
 
-<img src="assets/logo.png" width="88" alt="">
+# ConfGoOne
 
-[![Latest Release](https://img.shields.io/github/v/release/Ma5t3r5hadw/ConfGoOne?label=latest&color=2f8ef4&style=for-the-badge)](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/Ma5t3r5hadw/ConfGoOne/total?color=6fc3ff&style=for-the-badge)](https://github.com/Ma5t3r5hadw/ConfGoOne/releases)
-[![Platform](https://img.shields.io/badge/platform-Windows-2f8ef4?style=for-the-badge)](#-download)
-[![License](https://img.shields.io/badge/license-Proprietary-8b7bff?style=for-the-badge)](LICENSE)
+### Security configuration auditing that tells you what's wrong, why it matters, and exactly how to fix it.
 
-<a href="https://confgoone.com/"><b>Website</b></a> ·
-<a href="#-download"><b>Download</b></a> ·
-<a href="#-licensing--pricing"><b>Pricing</b></a> ·
-<a href="#-support">Support</a>
+[![Latest release](https://img.shields.io/github/v/release/Ma5t3r5hadw/ConfGoOne?label=latest%20release&color=2f8ef4&style=for-the-badge)](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest)
+[![Platform](https://img.shields.io/badge/platform-Windows-2f8ef4?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest)
+[![Runs offline](https://img.shields.io/badge/runs-offline%20by%20default-22c55e?style=for-the-badge)](#-privacy-first)
+[![License](https://img.shields.io/badge/license-proprietary-8b7bff?style=for-the-badge)](LICENSE)
+
+**[Website](https://www.confgoone.com/)** · **[Download](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest)** · **[Product tour](https://www.confgoone.com/product)** · **[Pricing](https://www.confgoone.com/#pricing)** · **[Blog](https://www.confgoone.com/blog/)** · **[Support](mailto:support@confgoone.com)**
 
 </div>
 
-<br>
+---
 
-Give ConfGoOne a configuration — from a file, a live device, or a pasted script's output — and it reviews it **immediately**: what's wrong, why it matters, and exactly how to fix it. No "start scan" button, no setup step. It checks itself against every compliance standard you care about, traces how small issues chain into a real breach, and hands you a report worth sending — in whatever format the person on the other end actually wants.
+> **Attackers read your configurations line by line. Now you can read them first.**
 
-> **Attackers read your configs line by line. Now you can read them first.**
-
-> This repository holds **releases and the project website only** — how you get the app and see what's new. The application itself is closed source.
+ConfGoOne reviews the security of network, server, cloud and database configurations the moment you open them — on your own PC. Every issue comes with plain-language impact, the evidence from your file, and the steps to fix it. Then it turns the whole review into a report your auditors, managers and engineers will actually read.
 
 <br>
 
-## 📋 Contents
+## ✨ Highlights
 
-- [What it does](#-what-it-does)
-- [Screenshots](#-screenshots)
-- [Everything included](#-everything-included)
-- [How it works](#-how-it-works)
-- [Download](#-download)
-- [Licensing & pricing](#-licensing--pricing)
-- [Privacy & security](#-privacy--security)
-- [License](#-license)
-- [Support](#-support)
+<table>
+<tr>
+<td width="50%" valign="top">
 
-<br>
+### 🔍 Findings you can act on
+Every issue explained in plain language, with the exact place in your configuration and how to fix it — not just a severity label.
 
-## ⚡ What it does
+</td>
+<td width="50%" valign="top">
 
-| | |
-|---|---|
-| 🛡 **Dashboard** | Your overall security score and the biggest problems, at a glance, the moment a review finishes. |
-| 🔍 **Findings** | Every issue, plainly explained, with exactly how to fix it — not just a severity label. |
-| ✅ **Frameworks** | Measured against the standards that matter to you, mapped automatically — or bring your own. |
-| ⚡ **Attack Path** | How small issues chain into a real breach, ranked by how dangerous each route actually is. |
-| 📊 **Report** | A polished document in one click, in whatever format the reader actually wants. |
-| 💬 **AI Assistant** | Ask questions about your own configuration in plain English — every answer is checked before you see it. |
-| 📸 **Live Screen Capture** | No config export, no CLI access — point it at a live screen and it reads and reviews what's on it. Screenshots are saved to a project folder automatically. |
-| 🧭 **Personal guide** | Learns how you work, greets you by name and suggests the next step on every page. |
-| 🎯 **Audit to one standard** | Choose only CIS, only STIG or only ISO 27001 — findings, scores and the report all follow your choice. |
-| 📋 **STIG checklists** | Export straight to STIG Viewer 2 (.ckl) and STIG Viewer 3 (.cklb), every item filled in. |
+### 🛡 Your posture at a glance
+One security score, the most serious problems first, and a clear view of what is already done right.
 
-<br>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
 
-## 📸 Screenshots
+### ✅ Mapped to the standards you answer to
+Findings line up with the major compliance frameworks automatically — or bring your own standard and audit against it.
 
-Real screens from one audit of a Cisco router configuration.
+</td>
+<td width="50%" valign="top">
 
-<p align="center"><img src="assets/shots/findings.jpg" width="100%" alt="Findings: the insecure line highlighted, with the commands to fix it"><br><sub><b>Findings</b> — the exact line in your config, why it matters, and the fix commands</sub></p>
+### ⚡ See the breach before it happens
+Small weaknesses rarely hurt alone. Attack paths show how they chain together, so you break the most dangerous routes first.
 
-<table><tr>
-<td width="50%"><img src="assets/shots/dashboard.jpg" alt="Dashboard"><br><sub><b>Dashboard</b> — posture score and failures by severity</sub></td>
-<td width="50%"><img src="assets/shots/attack-path.jpg" alt="Attack Path"><br><sub><b>Attack Path</b> — how findings chain into a breach, ranked</sub></td>
-</tr><tr>
-<td width="50%"><img src="assets/shots/report.jpg" alt="Report"><br><sub><b>Report</b> — filter by framework and severity; HTML, PDF, Word, STIG .ckl/.cklb</sub></td>
-<td width="50%"><img src="assets/shots/frameworks.jpg" alt="Frameworks"><br><sub><b>Frameworks</b> — CIS, DISA STIG, NIST 800-53, ISO 27001 and more</sub></td>
-</tr></table>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
 
-More on the website: [Product tour](https://confgoone.com/product.html) · [Cisco audit](https://confgoone.com/cisco-config-audit.html) · [Firewall audit](https://confgoone.com/firewall-config-audit.html) · [STIG checklists](https://confgoone.com/stig-checklist.html) · [CIS audit](https://confgoone.com/cis-benchmark-audit.html)
+### 🧾 Compare Reports <sup>Pro</sup>
+Bring reports from other security tools — or your own — and check every finding against the real configuration: what's confirmed, what's a false positive, and what was missed.
 
-<br>
+</td>
+<td width="50%" valign="top">
 
-## 🧩 Everything included
+### 📊 Reports people read
+One-click, client-ready reports in the format each reader wants, from a one-page executive summary to the full technical detail.
 
-One license unlocks all of it — no add-on packs, no feature paywall inside the app.
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
 
-<details>
-<summary><b>🧠 Review engine</b></summary>
-<br>
+### 🤖 AI that shows its work — optional
+Ask questions about your own configuration in plain English. Off by default; bring your own provider or run it fully local.
 
-- Deterministic rule-matching engine — real analysis, not an LLM guess
-- Built-in coverage for firewalls, routers, switches, servers, cloud platforms, containers, and databases
-- Figures out what it's looking at on its own — no dropdown to fill in first
-- Picks up device types it hasn't seen before, automatically
-- Scans for exposed secrets and hardcoded credentials
-- Tracks known CVEs against the versions it finds — online or fully offline
+</td>
+<td width="50%" valign="top">
 
-</details>
+### 🗂 Built for real engagements
+Group devices by client, keep your audit history, track accepted risks, and watch for changes between audits.
 
-<details>
-<summary><b>✅ Compliance</b></summary>
-<br>
-
-- Every major framework mapped automatically — CIS, NIST 800-53 / 800-171 / CSF, PCI-DSS, ISO 27001, HIPAA, SOC 2, MITRE ATT&CK, DISA STIG, CMMC, FedRAMP, Essential Eight, Cyber Essentials, GDPR, NIS2, IEC 62443, and more
-- **Control Harmonization** — one finding mapped to every framework it satisfies at once, instead of proving the same control over and over
-- Bring your own framework — describe your own controls and findings map straight to them
-- Import a DISA STIG or SCAP benchmark (XCCDF) directly and run it alongside the built-in packs
-- CIS benchmark scoring built in
-- Configuration drift detection against a saved baseline, with auto-generated remediation PRs
-
-</details>
-
-<details>
-<summary><b>⚡ Attack & risk</b></summary>
-<br>
-
-- **Attack Path ranking** — traces how small issues chain into a real breach, ranked by how dangerous each route is
-- Multi-hop reachability analysis across your whole network, not just one device at a time
-- **Cyber Risk Quantification** — turns findings into a dollar-estimated risk exposure using FAIR-style modeling, not just a severity label
-
-</details>
-
-<details>
-<summary><b>🤖 AI, entirely optional</b></summary>
-<br>
-
-- Off by default — every core feature works without it
-- Bring your own provider: local (Ollama), OpenAI, Anthropic, Gemini, OpenRouter, NVIDIA NIM, or any self-hosted OpenAI-compatible endpoint
-- An independent AI pass double-checks results before you ever see them
-- Ask questions about your own configuration in plain English
-- Point it at a live screen and it reads what's there
-
-</details>
-
-<details>
-<summary><b>📊 Reporting</b></summary>
-<br>
-
-- One-click export to HTML, PDF, Word, or Excel
-- The HTML report filters by framework and severity, and includes the attack path diagrams
-- DISA STIG checklists for STIG Viewer (.ckl and .cklb)
-- A shareable report built for whoever's actually going to read it — an engineer or an executive
-- CI/CD REST API to run reviews as part of your own pipeline
-
-</details>
-
-<details>
-<summary><b>🗂 Management</b></summary>
-<br>
-
-- Suppress and track accepted-risk findings without ever losing them
-- Full scan history, kept and searchable
-- Group devices into named engagements for client-based, batch auditing
-- Scan a whole fleet of devices from one list, not one at a time
-- Schedule recurring scans so nothing goes stale
-- License activation bound to your machine, not floating around
-
-</details>
-
-<details>
-<summary><b>🏢 Multi-tenant / MSP</b></summary>
-<br>
-
-- Manage multiple clients or environments from one Enterprise account
-- Per-tenant scan quotas and usage tracking
-- Cross-device attack chain analysis across an entire managed environment
-
-</details>
-
-<details>
-<summary><b>🖥 Platform</b></summary>
-<br>
-
-- Open a file, paste output, connect live, or capture a live screen — however you can reach it
-- Runs entirely offline by default; nothing leaves your machine unless you turn AI on
-- Light and dark themes
-- Portable — no install, no admin rights, just run it. Windows and macOS, with Linux underway
-
-</details>
-
-<br>
-
-## 🔄 How it works
-
-```
- 1. Input        Open a file, connect live, or share a screen
-        │
- 2. Recognize    Figures out the device type on its own
-        │
- 3. Review       Full deterministic pass + optional AI validation
-        │
- 4. Results      Score, findings, and the riskiest attack path
-        │
- 5. Export       One click, whatever format you need
-```
-
-There's no "start scan" button to remember — the review begins the instant you give it something to look at.
+</td>
+</tr>
+</table>
 
 <br>
 
 ## 📥 Download
 
-**[Download ConfGoOne.exe](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest/download/ConfGoOne.exe)** — always the latest version. No install, no admin rights — just run it.
+1. Get the installer from the **[latest release](https://github.com/Ma5t3r5hadw/ConfGoOne/releases/latest)**.
+2. Run it — no account needed to start.
+3. Open a configuration file and your first review is ready in seconds.
 
-Windows only for now, macOS in progress. When a new version is out, the app tells you — your history and settings carry over when you upgrade.
+The app tells you when a new version is available.
 
 <br>
 
-## 💳 Licensing & pricing
+## 💳 Plans
 
-| | Free | Pro | Enterprise |
+| | **Free** | **Pro** | **Enterprise** |
 |---|:---:|:---:|:---:|
-| **Price** | $0 forever | $49/mo | $129/mo |
-| Scans | 3, ever | 50/month | Unlimited |
-| Compliance frameworks | CIS + NIST 800-53 | All 16 + custom/XCCDF | All 16 + custom/XCCDF |
-| Report export | HTML | HTML, PDF, Word, Excel | HTML, PDF, Word, Excel |
-| Cloud AI + validation pass | — | ✅ | ✅ |
-| Drift detection + remediation PRs | — | ✅ | ✅ |
-| Cyber Risk Quantification | — | ✅ | ✅ |
-| Multi-tenant / MSP mode | — | — | ✅ |
-| Support | Community | Priority email | Direct channel |
+| Try real audits | ✅ | ✅ | ✅ |
+| Every compliance framework | — | ✅ | ✅ |
+| PDF and Word reports | — | ✅ | ✅ |
+| Live device scanning | — | ✅ | ✅ |
+| Compare Reports | — | ✅ | ✅ |
+| Multi-client and team use | — | — | ✅ |
 
-One license, activated on one machine. See the **[pricing page](https://confgoone.com/#pricing)** for current terms, discounts on longer billing cycles, and tax details.
+See **[pricing](https://www.confgoone.com/#pricing)** for current details.
 
 <br>
 
-## 🔒 Privacy & security
+## 🔒 Privacy first
 
-- Runs **entirely offline by default** — your configuration data never leaves your machine
-- The only exception is whatever you explicitly send to your own AI provider, if you choose to turn that feature on
-- No install-time telemetry
-- License keys are bound to your machine, verified cryptographically, and never phone home
-- Refuses traffic-interception proxies and debuggers, so nobody can watch what the app sends
-- New compliance checks arrive cryptographically signed, and are verified before they're used
+- **Your configurations never leave your PC.** Reviews, findings, history and reports stay on your machine.
+- **No telemetry.** Nothing about what you scan or how you use the app is collected.
+- **AI is optional and yours.** Use your own provider, or a local model that sends nothing anywhere.
+- **Offline whenever you want.** Online lookups can be switched off in Settings.
 
-<br>
-
-## 📜 License
-
-ConfGoOne is **proprietary software — not open source.** This repository is public so you can download releases and see what's new; it does not grant any right to copy, modify or redistribute its contents. Use of the app is covered by the [Terms of Service](https://confgoone.com/terms.html). See **[LICENSE](LICENSE)** for the full terms.
+Read the full **[privacy policy](https://www.confgoone.com/privacy)**.
 
 <br>
 
-## 🤝 Support
+## 💬 Support
 
-Found a bug, or something not working as expected? Open an **[issue](https://github.com/Ma5t3r5hadw/ConfGoOne/issues)** here.
-
-For licensing or billing questions, use the contact link on the **[website](https://confgoone.com/)**, or email **support@confgoone.com**.
+Questions, licensing or a problem with a release: **[support@confgoone.com](mailto:support@confgoone.com)**
 
 <br>
+
+## 📄 License
+
+ConfGoOne is proprietary software. This repository publishes the app's releases only — the application itself is closed source. See **[LICENSE](LICENSE)**.
 
 <div align="center">
-
-<sub>© <!-- year --> ConfGoOne. All rights reserved.</sub>
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d121e,50:2f8ef4,100:8b7bff&height=100&section=footer" width="100%" alt="">
-
+<br>
+<sub>© ConfGoOne. All rights reserved.</sub>
 </div>
