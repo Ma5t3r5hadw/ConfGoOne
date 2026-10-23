@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:060b16,40:1d4ed8,75:6d28d9,100:a855f7&height=230&section=header&text=ConfGoOne&fontSize=72&fontColor=f8fafc&animation=twinkling&fontAlignY=36&desc=Read%20your%20configurations%20before%20attackers%20do&descAlignY=58&descSize=19" width="100%" alt="ConfGoOne — read your configurations before attackers do">
+<a href="https://www.confgoone.com/"><img src="https://www.confgoone.com/assets/readme/hero.svg" width="100%" alt="ConfGoOne — read your configurations before attackers do. Every issue explained, proven and ready to fix, on your own PC."></a>
 
 <a href="https://www.confgoone.com/">
   <img src="https://readme-typing-svg.demolab.com?font=Plus+Jakarta+Sans&weight=700&size=24&duration=2800&pause=900&color=60A5FA&center=true&vCenter=true&width=760&height=48&lines=Open+a+configuration.+See+what's+wrong+in+seconds.;Every+finding+explained+%E2%80%94+with+the+fix.;Prove+which+scanner+findings+are+real.;Reports+your+auditors+and+managers+will+read.;Runs+on+your+PC.+Your+configs+stay+there." alt="Open a configuration. See what's wrong in seconds. Every finding explained — with the fix. Prove which scanner findings are real.">
@@ -143,6 +143,47 @@
 | ✈️ **Offline when you want** | Online lookups can be switched off in Settings. |
 
 Full details in the **[privacy policy](https://www.confgoone.com/privacy)**.
+
+<br>
+
+## 🎯 Built for
+
+<table>
+<tr>
+<td width="25%" align="center" valign="top"><h3>🕵️</h3><b>Security auditors</b><br><sub>Evidence-backed findings and reports that hold up in front of a client.</sub></td>
+<td width="25%" align="center" valign="top"><h3>🤝</h3><b>Consultants &amp; MSPs</b><br><sub>Many clients, many devices — organised by engagement, ready to hand over.</sub></td>
+<td width="25%" align="center" valign="top"><h3>🛠</h3><b>Network &amp; infrastructure teams</b><br><sub>Know what to fix first and paste the fix, before the next audit finds it.</sub></td>
+<td width="25%" align="center" valign="top"><h3>📋</h3><b>Compliance &amp; risk</b><br><sub>Findings mapped to the standards you report on, with the proof attached.</sub></td>
+</tr>
+</table>
+
+<br>
+
+## ❓ Questions
+
+<details>
+<summary><b>Do my configurations leave my computer?</b></summary>
+<br>
+No. Reviews run on your own PC. Online lookups are optional and never include your configuration content.
+</details>
+
+<details>
+<summary><b>Do I need an AI subscription?</b></summary>
+<br>
+No. Every core feature works without AI. If you want it, bring your own provider or run a local model.
+</details>
+
+<details>
+<summary><b>Can it check reports from tools we already use?</b></summary>
+<br>
+Yes — with <b>Compare</b> (Pro), reports from other security tools and your own reports are checked against the real configuration, so you know which findings are real. Try it on any plan with the built-in sample data.
+</details>
+
+<details>
+<summary><b>Is there a free version?</b></summary>
+<br>
+Yes. Download it and run real audits without an account. See <a href="https://www.confgoone.com/#pricing">pricing</a> for what Pro and Enterprise add.
+</details>
 
 <br>
 
